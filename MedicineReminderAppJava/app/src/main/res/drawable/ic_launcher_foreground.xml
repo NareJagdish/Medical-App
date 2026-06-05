@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Medical Cross - Medical Blue (#1976D2) -->
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M46,32h16v14h14v16h-14v14h-16v-14h-14v-16h14z" />
+
+    <!-- Heart Symbol - Light Blue (#64B5F6) -->
+    <path
+        android:fillColor="#64B5F6"
+        android:pathData="M54,62 C54,62 46,55 46,50 C46,46 49,44 51,46 C52,47 53,48 54,49 C55,48 56,47 57,46 C59,44 62,46 62,50 C62,55 54,62 54,62 Z" />
+
+    <!-- Pill Symbol - Medical Blue (#1976D2) -->
+    <path
+        android:fillColor="#1976D2"
+        android:pathData="M78,35 L85,42 A4,4 0 0 1 80,47 L73,40 A4,4 0 0 1 78,35 Z" />
+    <path
+        android:fillColor="#64B5F6"
+        android:pathData="M73,40 L66,47 A4,4 0 0 1 61,42 L68,35 A4,4 0 0 1 73,40 Z" />
+
+</vector>

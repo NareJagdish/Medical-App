@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-mergeDebugResources-3:\\layout\\item_doctor.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\item_doctor.xml"
+    },
+    {
+        "merged": "com.example.medreminderjava.app-mergeDebugResources-3:/layout/activity_main.xml",
+        "source": "com.example.medreminderjava.app-main-6:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.example.medreminderjava.app-mergeDebugResources-3:/layout/dialog_add_doctor.xml",
+        "source": "com.example.medreminderjava.app-main-6:/layout/dialog_add_doctor.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-mergeDebugResources-3:\\layout\\activity_doctor_detail.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\activity_doctor_detail.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-mergeDebugResources-3:\\layout\\activity_medicine_form.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\activity_medicine_form.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-mergeDebugResources-3:\\layout\\dialog_add_doctor.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\dialog_add_doctor.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-mergeDebugResources-3:\\layout\\item_medicine.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\item_medicine.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-mergeDebugResources-3:\\layout\\dialog_edit_profile.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\dialog_edit_profile.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-mergeDebugResources-3:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\activity_main.xml"
+    }
+]

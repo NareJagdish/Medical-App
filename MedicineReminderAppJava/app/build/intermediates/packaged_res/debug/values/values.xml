@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent_cyan">#64B5F6</color>
+    <color name="alert_danger">#FF5252</color>
+    <color name="alert_ok">#4CAF50</color>
+    <color name="alert_warning">#FFB74D</color>
+    <color name="background_dark">#0A0E1A</color>
+    <color name="black">#FF000000</color>
+    <color name="divider">#242F42</color>
+    <color name="grey_dark">#525252</color>
+    <color name="grey_light">#E0E0E0</color>
+    <color name="primary">#1976D2</color>
+    <color name="primary_variant">#1565C0</color>
+    <color name="surface_dark">#151C2C</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#A0AABF</color>
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="add_medicine">Add Medicine</string>
+    <string name="app_name">Medicine Reminder</string>
+    <string name="appointments">Appointments</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_medicine">Delete Medicine</string>
+    <string name="doctors_appointments">Doctor Appointments &amp; Medicines</string>
+    <string name="dosage_per_time_hint">Dosage per time (e.g. 1)</string>
+    <string name="edit_medicine">Edit Medicine</string>
+    <string name="emergency">Emergency</string>
+    <string name="health_dashboard">Health Dashboard</string>
+    <string name="log_dose">Log Dose Taken</string>
+    <string name="medicine_name_hint">Medicine Name</string>
+    <string name="no_medicines">No medicines scheduled</string>
+    <string name="quick_services">Quick Services</string>
+    <string name="remaining_days">%1$s days remaining</string>
+    <string name="save">Save</string>
+    <string name="times_per_day_hint">Times to take per day</string>
+    <string name="timing_spinner_label">Meal timing</string>
+    <string name="total_quantity_hint">Total quantity starting (e.g. 30)</string>
+    <string name="user_age">Age: </string>
+    <string name="user_id">User ID: </string>
+    <string name="user_name">Name: </string>
+    <string name="user_profile">User Profile</string>
+    <string name="view_all">View All</string>
+    <string name="view_medicines">View Medicines</string>
+    <string name="your_specialists">Your Specialists</string>
+    <style name="Theme.MedicineReminder" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorSecondary">@color/accent_cyan</item>
+        <item name="colorTertiary">@color/accent_cyan</item>
+
+        
+        <item name="android:statusBarColor">@color/background_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        
+        <item name="android:windowBackground">@color/background_dark</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorSurfaceVariant">@color/divider</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+
+        
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+</resources>
