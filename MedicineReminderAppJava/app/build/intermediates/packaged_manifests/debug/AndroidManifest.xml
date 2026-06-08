@@ -57,6 +57,10 @@
         <activity
             android:name="com.example.medreminderjava.MedicineFormActivity"
             android:exported="false" />
+        <activity
+            android:name="com.example.medreminderjava.MedicineListActivity"
+            android:exported="false"
+            android:parentActivityName="com.example.medreminderjava.MainActivity" />
 
         <!-- BroadcastReceiver for scheduling medicine alarms and daily stock alerts -->
         <receiver

@@ -69,9 +69,37 @@ public class MainActivity extends AppCompatActivity implements DoctorAdapter.OnD
 
         // Use Case 2: Emergency option click listener
         binding.cardEmergency.setOnClickListener(v -> showEmergencyDoctorDialog());
+        binding.cardAppointments.setOnClickListener(v -> {
+            Toast.makeText(this, "Opening appointment booking...", Toast.LENGTH_SHORT).show();
+            // In a real app, this would open a calendar or booking screen
+        });
 
         binding.rvDoctors.setLayoutManager(new LinearLayoutManager(this));
+        setupBottomNavigation();
         requestAppPermissions();
+    }
+
+    private void setupBottomNavigation() {
+        binding.bottomNavigation.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_home) {
+                return true;
+            } else if (id == R.id.nav_profile) {
+                showEditProfileDialog();
+                return true;
+            } else if (id == R.id.nav_medicines) {
+                // Show all medicines across all doctors
+                startActivity(new Intent(this, MedicineListActivity.class));
+                return false;
+            } else if (id == R.id.nav_appointments) {
+                Toast.makeText(this, "Manage your doctor appointments here.", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (id == R.id.nav_reports) {
+                Toast.makeText(this, "Health reports and history feature coming soon.", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override

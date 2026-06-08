@@ -45,6 +45,11 @@ public class AlarmReceiver extends BroadcastReceiver {
             String timingInfo = intent.getStringExtra(EXTRA_TIMING_INFO);
 
             if (medicineId != -1 && medicineName != null) {
+                // Deduct dose automatically as requested by user
+                DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
+                int remaining = dbHelper.deductMedicineDose(medicineId);
+                Log.d(TAG, "Automatically deducted dose for " + medicineName + ". Remaining stock: " + remaining);
+
                 NotificationHelper.sendDoseNotification(context, medicineId, medicineName, timingInfo);
                 sendSmsToAlternateNumber(context, medicineName, timingInfo);
             }

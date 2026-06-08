@@ -43,6 +43,11 @@
             android:name=".MedicineFormActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".MedicineListActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+
         <!-- BroadcastReceiver for scheduling medicine alarms and daily stock alerts -->
         <receiver
             android:name=".notification.AlarmReceiver"
