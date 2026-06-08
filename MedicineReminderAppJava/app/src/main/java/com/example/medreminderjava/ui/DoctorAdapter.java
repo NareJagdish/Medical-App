@@ -80,7 +80,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
                 binding.tvRemainingDaysBadge.setText("No Medicines");
                 binding.tvRemainingDaysBadge.setBackgroundResource(R.drawable.badge_bg_normal);
                 binding.tvRemainingDaysBadge.setBackgroundTintList(
-                        ColorStateList.valueOf(ContextCompat.getColor(context, R.color.grey_dark)));
+                        ColorStateList.valueOf(ContextCompat.getColor(context, R.color.text_secondary)));
             } else if (minDays == 0) {
                 // Out of stock
                 binding.tvRemainingDaysBadge.setText("Finished!");
@@ -99,7 +99,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
                 } else {
                     binding.tvRemainingDaysBadge.setBackgroundResource(R.drawable.badge_bg_normal);
                     binding.tvRemainingDaysBadge.setBackgroundTintList(
-                            ColorStateList.valueOf(ContextCompat.getColor(context, R.color.alert_ok)));
+                            ColorStateList.valueOf(ContextCompat.getColor(context, R.color.success)));
                 }
             }
 

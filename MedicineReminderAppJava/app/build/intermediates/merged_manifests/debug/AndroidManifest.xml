@@ -12,6 +12,11 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <permission
         android:name="com.example.medreminderjava.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -31,7 +36,7 @@
         android:testOnly="true"
         android:theme="@style/Theme.MedicineReminder" >
         <activity
-            android:name="com.example.medreminderjava.MainActivity"
+            android:name="com.example.medreminderjava.LoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +44,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.medreminderjava.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.medreminderjava.MainActivity"
+            android:exported="false" />
         <activity
             android:name="com.example.medreminderjava.DoctorDetailActivity"
             android:exported="false"

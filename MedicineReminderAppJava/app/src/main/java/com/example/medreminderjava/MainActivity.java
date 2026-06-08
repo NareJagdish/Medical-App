@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -31,6 +30,8 @@ import com.example.medreminderjava.ui.DoctorAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements DoctorAdapter.OnDoctorClickListener {
 
@@ -39,11 +40,10 @@ public class MainActivity extends AppCompatActivity implements DoctorAdapter.OnD
     private SharedPreferences sharedPrefs;
 
     private static final String PREFS_NAME = "UserPrefs";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_AGE = "age";
-    private static final String KEY_USER_ID = "user_id";
+    private static final String KEY_IS_LOGGED_IN = "is_logged_in";
+    private static final String KEY_LOGGED_IN_MOBILE = "logged_in_mobile";
 
-    private static final int PERMISSION_REQUEST_POST_NOTIFICATIONS = 101;
+    private static final int PERMISSION_REQUEST_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements DoctorAdapter.OnD
         binding.cardEmergency.setOnClickListener(v -> showEmergencyDoctorDialog());
 
         binding.rvDoctors.setLayoutManager(new LinearLayoutManager(this));
-        requestNotificationPermission();
+        requestAppPermissions();
     }
 
     @Override
@@ -81,60 +81,145 @@ public class MainActivity extends AppCompatActivity implements DoctorAdapter.OnD
     }
 
     private void loadUserProfile() {
-        String name = sharedPrefs.getString(KEY_NAME, "Rajesh Deshmukh");
-        String age = sharedPrefs.getString(KEY_AGE, "45");
-        String userId = sharedPrefs.getString(KEY_USER_ID, "UID-784201");
+        String loggedInMobile = sharedPrefs.getString(KEY_LOGGED_IN_MOBILE, "");
+        if (loggedInMobile.isEmpty()) {
+            logout();
+            return;
+        }
 
-        binding.tvUserName.setText("Name: " + name);
-        binding.tvUserAge.setText("Age: " + age + " years");
-        binding.tvUserId.setText("User ID: " + userId);
+        android.database.Cursor cursor = dbHelper.getUserByMobile(loggedInMobile);
+        if (cursor != null && cursor.moveToFirst()) {
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_NAME));
+            String age = cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_AGE));
+            String bloodGroup = cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_BLOOD_GROUP));
+            String userId = cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_MOBILE));
+
+            binding.tvUserName.setText(getString(R.string.user_name_format, name));
+            binding.tvUserAge.setText(getString(R.string.user_age_format, age));
+            binding.tvUserId.setText(getString(R.string.user_id_format, userId));
+            binding.tvUserBloodGroup.setText(bloodGroup);
+        } else {
+            // User not found in database, session is invalid
+            logout();
+        }
+        if (cursor != null) cursor.close();
     }
 
     private void showEditProfileDialog() {
         DialogEditProfileBinding dialogBinding = DialogEditProfileBinding.inflate(LayoutInflater.from(this));
-        dialogBinding.etName.setText(sharedPrefs.getString(KEY_NAME, ""));
-        dialogBinding.etAge.setText(sharedPrefs.getString(KEY_AGE, ""));
-        dialogBinding.etUserId.setText(sharedPrefs.getString(KEY_USER_ID, ""));
+        String loggedInMobile = sharedPrefs.getString(KEY_LOGGED_IN_MOBILE, "");
+        
+        android.database.Cursor cursor = dbHelper.getUserByMobile(loggedInMobile);
+        if (cursor != null && cursor.moveToFirst()) {
+            dialogBinding.etName.setText(cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_NAME)));
+            dialogBinding.etLocation.setText(cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_LOCATION)));
+            dialogBinding.etAge.setText(cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_AGE)));
+            dialogBinding.etBloodGroup.setText(cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_BLOOD_GROUP)));
+            dialogBinding.etAltMobile.setText(cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_ALT_MOBILE)));
+            dialogBinding.etUserId.setText(loggedInMobile);
+        }
+        if (cursor != null) cursor.close();
 
-        new AlertDialog.Builder(this)
+        android.text.TextWatcher watcher = new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                dialogBinding.tilName.setError(null);
+                dialogBinding.tilAltMobile.setError(null);
+            }
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        };
+        dialogBinding.etName.addTextChangedListener(watcher);
+        dialogBinding.etAltMobile.addTextChangedListener(watcher);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Edit Profile")
                 .setView(dialogBinding.getRoot())
-                .setPositiveButton("Save", (dialog, which) -> {
-                    String n = dialogBinding.etName.getText().toString().trim();
-                    String a = dialogBinding.etAge.getText().toString().trim();
-                    String u = dialogBinding.etUserId.getText().toString().trim();
-                    if (!n.isEmpty() && !a.isEmpty() && !u.isEmpty()) {
-                        sharedPrefs.edit().putString(KEY_NAME, n).putString(KEY_AGE, a).putString(KEY_USER_ID, u).apply();
-                        loadUserProfile();
-                    }
-                })
+                .setPositiveButton("Save", null)
                 .setNegativeButton("Cancel", null)
                 .show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String name = Objects.requireNonNull(dialogBinding.etName.getText()).toString().trim();
+            String location = Objects.requireNonNull(dialogBinding.etLocation.getText()).toString().trim();
+            String age = Objects.requireNonNull(dialogBinding.etAge.getText()).toString().trim();
+            String bloodGroup = Objects.requireNonNull(dialogBinding.etBloodGroup.getText()).toString().trim();
+            String altMobile = Objects.requireNonNull(dialogBinding.etAltMobile.getText()).toString().trim();
+
+            boolean isValid = true;
+            if (name.isEmpty()) {
+                dialogBinding.tilName.setError("Name required");
+                isValid = false;
+            } else if (name.matches(".*\\d.*")) {
+                dialogBinding.tilName.setError("Name shouldn't have digits");
+                isValid = false;
+            }
+
+            if (!altMobile.isEmpty() && altMobile.length() != 10) {
+                dialogBinding.tilAltMobile.setError("Must be 10 digits");
+                isValid = false;
+            }
+
+            if (isValid) {
+                dbHelper.updateUser(name, location, age, bloodGroup, loggedInMobile, altMobile);
+                loadUserProfile();
+                Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
     }
 
     // Use Case 1: Add new doctor with hospital details
     private void showAddDoctorDialog() {
         DialogAddDoctorBinding dialogBinding = DialogAddDoctorBinding.inflate(LayoutInflater.from(this));
+        
+        android.text.TextWatcher watcher = new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                dialogBinding.tilDoctorName.setError(null);
+                dialogBinding.tilHospitalContact.setError(null);
+            }
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        };
+        dialogBinding.etDoctorName.addTextChangedListener(watcher);
+        dialogBinding.etHospitalContact.addTextChangedListener(watcher);
 
-        new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Add Doctor")
                 .setView(dialogBinding.getRoot())
-                .setPositiveButton("Add", (dialog, which) -> {
-                    String name = dialogBinding.etDoctorName.getText().toString().trim();
-                    String location = dialogBinding.etHospitalLocation.getText().toString().trim();
-                    String contact = dialogBinding.etHospitalContact.getText().toString().trim();
-                    String email = dialogBinding.etDoctorEmail.getText().toString().trim();
-
-                    if (!name.isEmpty() && !contact.isEmpty()) {
-                        dbHelper.addDoctor(name, location, contact, email);
-                        refreshDoctorList();
-                        Toast.makeText(this, "Doctor Added", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, "Name and Contact are required", Toast.LENGTH_SHORT).show();
-                    }
-                })
+                .setPositiveButton("Add", null)
                 .setNegativeButton("Cancel", null)
                 .show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String name = Objects.requireNonNull(dialogBinding.etDoctorName.getText()).toString().trim();
+            String location = Objects.requireNonNull(dialogBinding.etHospitalLocation.getText()).toString().trim();
+            String contact = Objects.requireNonNull(dialogBinding.etHospitalContact.getText()).toString().trim();
+            String email = Objects.requireNonNull(dialogBinding.etDoctorEmail.getText()).toString().trim();
+
+            boolean isValid = true;
+            if (name.isEmpty()) {
+                dialogBinding.tilDoctorName.setError("Name required");
+                isValid = false;
+            } else if (name.matches(".*\\d.*")) {
+                dialogBinding.tilDoctorName.setError("Name shouldn't have digits");
+                isValid = false;
+            }
+
+            if (contact.isEmpty()) {
+                dialogBinding.tilHospitalContact.setError("Contact required");
+                isValid = false;
+            } else if (contact.length() != 10) {
+                dialogBinding.tilHospitalContact.setError("Must be 10 digits");
+                isValid = false;
+            }
+
+            if (isValid) {
+                dbHelper.addDoctor(name, location, contact, email);
+                refreshDoctorList();
+                Toast.makeText(this, "Doctor Added", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
     }
 
     // Use Case 2: Display doctor names and call on click
@@ -188,21 +273,53 @@ public class MainActivity extends AppCompatActivity implements DoctorAdapter.OnD
         dialogBinding.etHospitalContact.setText(doctor.getContact());
         dialogBinding.etDoctorEmail.setText(doctor.getEmail());
 
-        new AlertDialog.Builder(this)
+        android.text.TextWatcher watcher = new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                dialogBinding.tilDoctorName.setError(null);
+                dialogBinding.tilHospitalContact.setError(null);
+            }
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        };
+        dialogBinding.etDoctorName.addTextChangedListener(watcher);
+        dialogBinding.etHospitalContact.addTextChangedListener(watcher);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Edit Doctor")
                 .setView(dialogBinding.getRoot())
-                .setPositiveButton("Save", (dialog, which) -> {
-                    String n = dialogBinding.etDoctorName.getText().toString().trim();
-                    String l = dialogBinding.etHospitalLocation.getText().toString().trim();
-                    String c = dialogBinding.etHospitalContact.getText().toString().trim();
-                    String e = dialogBinding.etDoctorEmail.getText().toString().trim();
-                    if (!n.isEmpty()) {
-                        dbHelper.updateDoctor(doctor.getId(), n, l, c, e);
-                        refreshDoctorList();
-                    }
-                })
+                .setPositiveButton("Save", null)
                 .setNegativeButton("Cancel", null)
                 .show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String n = Objects.requireNonNull(dialogBinding.etDoctorName.getText()).toString().trim();
+            String l = Objects.requireNonNull(dialogBinding.etHospitalLocation.getText()).toString().trim();
+            String c = Objects.requireNonNull(dialogBinding.etHospitalContact.getText()).toString().trim();
+            String e = Objects.requireNonNull(dialogBinding.etDoctorEmail.getText()).toString().trim();
+            
+            boolean isValid = true;
+            if (n.isEmpty()) {
+                dialogBinding.tilDoctorName.setError("Name required");
+                isValid = false;
+            } else if (n.matches(".*\\d.*")) {
+                dialogBinding.tilDoctorName.setError("Name shouldn't have digits");
+                isValid = false;
+            }
+
+            if (c.isEmpty()) {
+                dialogBinding.tilHospitalContact.setError("Contact required");
+                isValid = false;
+            } else if (c.length() != 10) {
+                dialogBinding.tilHospitalContact.setError("Must be 10 digits");
+                isValid = false;
+            }
+
+            if (isValid) {
+                dbHelper.updateDoctor(doctor.getId(), n, l, c, e);
+                refreshDoctorList();
+                dialog.dismiss();
+            }
+        });
     }
 
     @Override
@@ -218,21 +335,49 @@ public class MainActivity extends AppCompatActivity implements DoctorAdapter.OnD
                 .show();
     }
 
-    private void requestNotificationPermission() {
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull android.view.MenuItem item) {
+        if (item.getItemId() == R.id.action_logout) {
+            logout();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void logout() {
+        sharedPrefs.edit().clear().apply();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+    }
+
+    private void requestAppPermissions() {
+        List<String> permissions = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) 
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_POST_NOTIFICATIONS);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.POST_NOTIFICATIONS);
             }
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.SEND_SMS);
+        }
+
+        if (!permissions.isEmpty()) {
+            ActivityCompat.requestPermissions(this, permissions.toArray(new String[0]), PERMISSION_REQUEST_CODE);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_POST_NOTIFICATIONS) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission granted!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Permissions granted!", Toast.LENGTH_SHORT).show();
             }
         }
     }

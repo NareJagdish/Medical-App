@@ -10,165 +10,187 @@
 10
 11    <!-- Permissions for notifications and precise scheduling -->
 12    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-12-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:5:5-77
-12-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:5:22-74
+12-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:5:5-77
+12-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:5:22-74
 13    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-13-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:6:5-79
-13-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:6:22-76
+13-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:6:5-79
+13-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:6:22-76
 14    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-14-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:7:5-81
-14-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:7:22-78
-15
-16    <permission
-16-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
-17        android:name="com.example.medreminderjava.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-17-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
-18        android:protectionLevel="signature" />
-18-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
-19
-20    <uses-permission android:name="com.example.medreminderjava.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-20-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
-20-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
-21
-22    <application
-22-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:9:5-47:19
-23        android:allowBackup="true"
-23-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:10:9-35
-24        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-24-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
-25        android:debuggable="true"
-26        android:extractNativeLibs="false"
-27        android:icon="@drawable/ic_launcher"
-27-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:11:9-45
-28        android:label="@string/app_name"
-28-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:12:9-41
-29        android:roundIcon="@drawable/ic_launcher"
-29-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:13:9-50
-30        android:supportsRtl="true"
-30-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:14:9-35
-31        android:testOnly="true"
-32        android:theme="@style/Theme.MedicineReminder" >
-32-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:15:9-54
-33        <activity
-33-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:17:9-24:20
-34            android:name="com.example.medreminderjava.MainActivity"
-34-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:18:13-41
-35            android:exported="true" >
-35-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:19:13-36
-36            <intent-filter>
-36-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:20:13-23:29
-37                <action android:name="android.intent.action.MAIN" />
-37-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:21:17-69
-37-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:21:25-66
-38
-39                <category android:name="android.intent.category.LAUNCHER" />
-39-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:22:17-77
-39-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:22:27-74
-40            </intent-filter>
-41        </activity>
-42        <activity
-42-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:26:9-29:58
-43            android:name="com.example.medreminderjava.DoctorDetailActivity"
-43-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:27:13-49
-44            android:exported="false"
-44-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:28:13-37
-45            android:parentActivityName="com.example.medreminderjava.MainActivity" />
-45-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:29:13-55
-46        <activity
-46-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:31:9-33:40
-47            android:name="com.example.medreminderjava.MedicineFormActivity"
-47-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:32:13-49
-48            android:exported="false" />
-48-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:33:13-37
-49
-50        <!-- BroadcastReceiver for scheduling medicine alarms and daily stock alerts -->
-51        <receiver
-51-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:36:9-45:20
-52            android:name="com.example.medreminderjava.notification.AlarmReceiver"
-52-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:37:13-55
-53            android:enabled="true"
-53-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:38:13-35
-54            android:exported="false" >
-54-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:39:13-37
-55            <intent-filter>
-55-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:40:13-44:29
-56                <action android:name="android.intent.action.BOOT_COMPLETED" />
-56-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:41:17-79
-56-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:41:25-76
-57                <action android:name="com.example.medreminderjava.ACTION_ALARM_DOSE" />
-57-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:42:17-88
-57-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:42:25-85
-58                <action android:name="com.example.medreminderjava.ACTION_ALARM_DAILY_CHECK" />
-58-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:43:17-95
-58-->C:\Users\Lenovo\.gemini\antigravity\scratch\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:43:25-92
-59            </intent-filter>
-60        </receiver>
-61
-62        <provider
-62-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
-63            android:name="androidx.startup.InitializationProvider"
-63-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
-64            android:authorities="com.example.medreminderjava.androidx-startup"
-64-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+14-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:7:5-81
+14-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:7:22-78
+15    <uses-permission android:name="android.permission.SEND_SMS" />
+15-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:8:5-67
+15-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:8:22-64
+16
+17    <uses-feature
+17-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:10:5-88
+18        android:name="android.hardware.telephony"
+18-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:10:19-60
+19        android:required="false" />
+19-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:10:61-85
+20
+21    <permission
+21-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+22        android:name="com.example.medreminderjava.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+22-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+23        android:protectionLevel="signature" />
+23-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
+24
+25    <uses-permission android:name="com.example.medreminderjava.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+25-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+25-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+26
+27    <application
+27-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:12:5-58:19
+28        android:allowBackup="true"
+28-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:13:9-35
+29        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+29-->[androidx.core:core:1.9.0] C:\Users\Lenovo\.gradle\caches\transforms-3\75919e89ab9acfe92b320b18b5eba894\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+30        android:debuggable="true"
+31        android:extractNativeLibs="false"
+32        android:icon="@drawable/ic_launcher"
+32-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:14:9-45
+33        android:label="@string/app_name"
+33-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:15:9-41
+34        android:roundIcon="@drawable/ic_launcher"
+34-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:16:9-50
+35        android:supportsRtl="true"
+35-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:17:9-35
+36        android:testOnly="true"
+37        android:theme="@style/Theme.MedicineReminder" >
+37-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:18:9-54
+38        <activity
+38-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:20:9-27:20
+39            android:name="com.example.medreminderjava.LoginActivity"
+39-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:21:13-42
+40            android:exported="true" >
+40-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:22:13-36
+41            <intent-filter>
+41-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:23:13-26:29
+42                <action android:name="android.intent.action.MAIN" />
+42-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:24:17-69
+42-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:24:25-66
+43
+44                <category android:name="android.intent.category.LAUNCHER" />
+44-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:25:17-77
+44-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:25:27-74
+45            </intent-filter>
+46        </activity>
+47        <activity
+47-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:29:9-31:40
+48            android:name="com.example.medreminderjava.RegisterActivity"
+48-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:30:13-45
+49            android:exported="false" />
+49-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:31:13-37
+50        <activity
+50-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:33:9-35:40
+51            android:name="com.example.medreminderjava.MainActivity"
+51-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:34:13-41
+52            android:exported="false" />
+52-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:35:13-37
+53        <activity
+53-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:37:9-40:58
+54            android:name="com.example.medreminderjava.DoctorDetailActivity"
+54-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:38:13-49
+55            android:exported="false"
+55-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:39:13-37
+56            android:parentActivityName="com.example.medreminderjava.MainActivity" />
+56-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:40:13-55
+57        <activity
+57-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:42:9-44:40
+58            android:name="com.example.medreminderjava.MedicineFormActivity"
+58-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:43:13-49
+59            android:exported="false" />
+59-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:44:13-37
+60
+61        <!-- BroadcastReceiver for scheduling medicine alarms and daily stock alerts -->
+62        <receiver
+62-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:47:9-56:20
+63            android:name="com.example.medreminderjava.notification.AlarmReceiver"
+63-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:48:13-55
+64            android:enabled="true"
+64-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:49:13-35
 65            android:exported="false" >
-65-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
-66            <meta-data
-66-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
-67                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-67-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
-68                android:value="androidx.startup" />
-68-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
-69            <meta-data
-69-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Lenovo\.gradle\caches\transforms-3\818eda85d3b5ca5901b62e2194b4fd5f\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:29:13-31:52
-70                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-70-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Lenovo\.gradle\caches\transforms-3\818eda85d3b5ca5901b62e2194b4fd5f\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:30:17-78
-71                android:value="androidx.startup" />
-71-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Lenovo\.gradle\caches\transforms-3\818eda85d3b5ca5901b62e2194b4fd5f\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:31:17-49
-72            <meta-data
-72-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
-73                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-73-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
-74                android:value="androidx.startup" />
-74-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
-75        </provider>
-76
-77        <receiver
-77-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
-78            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-78-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
-79            android:directBootAware="false"
-79-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
-80            android:enabled="true"
-80-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
-81            android:exported="true"
-81-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
-82            android:permission="android.permission.DUMP" >
-82-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
-83            <intent-filter>
-83-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
-84                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-84-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
-84-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
-85            </intent-filter>
-86            <intent-filter>
-86-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
-87                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-87-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
-87-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
-88            </intent-filter>
-89            <intent-filter>
-89-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
-90                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-90-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
-90-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
-91            </intent-filter>
-92            <intent-filter>
-92-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
-93                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-93-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
-93-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
-94            </intent-filter>
-95        </receiver>
-96    </application>
-97
-98</manifest>
+65-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:50:13-37
+66            <intent-filter>
+66-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:51:13-55:29
+67                <action android:name="android.intent.action.BOOT_COMPLETED" />
+67-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:52:17-79
+67-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:52:25-76
+68                <action android:name="com.example.medreminderjava.ACTION_ALARM_DOSE" />
+68-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:53:17-88
+68-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:53:25-85
+69                <action android:name="com.example.medreminderjava.ACTION_ALARM_DAILY_CHECK" />
+69-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:54:17-95
+69-->G:\Jagdish\Git-Repo\Medical-App\MedicineReminderAppJava\app\src\main\AndroidManifest.xml:54:25-92
+70            </intent-filter>
+71        </receiver>
+72
+73        <provider
+73-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+74            android:name="androidx.startup.InitializationProvider"
+74-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+75            android:authorities="com.example.medreminderjava.androidx-startup"
+75-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+76            android:exported="false" >
+76-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+77            <meta-data
+77-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+78                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+78-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+79                android:value="androidx.startup" />
+79-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Lenovo\.gradle\caches\transforms-3\4381fccdde393d19d04161b40313d198\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+80            <meta-data
+80-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Lenovo\.gradle\caches\transforms-3\818eda85d3b5ca5901b62e2194b4fd5f\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:29:13-31:52
+81                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+81-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Lenovo\.gradle\caches\transforms-3\818eda85d3b5ca5901b62e2194b4fd5f\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:30:17-78
+82                android:value="androidx.startup" />
+82-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Lenovo\.gradle\caches\transforms-3\818eda85d3b5ca5901b62e2194b4fd5f\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:31:17-49
+83            <meta-data
+83-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
+84                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+84-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
+85                android:value="androidx.startup" />
+85-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
+86        </provider>
+87
+88        <receiver
+88-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
+89            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+89-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
+90            android:directBootAware="false"
+90-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
+91            android:enabled="true"
+91-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
+92            android:exported="true"
+92-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
+93            android:permission="android.permission.DUMP" >
+93-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
+94            <intent-filter>
+94-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
+95                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
+95-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
+96            </intent-filter>
+97            <intent-filter>
+97-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
+98                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
+98-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
+99            </intent-filter>
+100            <intent-filter>
+100-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
+101                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+101-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
+101-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
+102            </intent-filter>
+103            <intent-filter>
+103-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
+104                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+104-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
+104-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Lenovo\.gradle\caches\transforms-3\2d7e59e65c0683989da89981a01e18f0\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+105            </intent-filter>
+106        </receiver>
+107    </application>
+108
+109</manifest>

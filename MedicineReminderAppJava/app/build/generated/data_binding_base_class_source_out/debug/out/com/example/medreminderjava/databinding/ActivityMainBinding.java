@@ -15,9 +15,10 @@ import androidx.viewbinding.ViewBindings;
 import com.example.medreminderjava.R;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -28,6 +29,9 @@ public final class ActivityMainBinding implements ViewBinding {
 
   @NonNull
   public final AppBarLayout appBarLayout;
+
+  @NonNull
+  public final BottomNavigationView bottomNavigation;
 
   @NonNull
   public final ImageButton btnEditProfile;
@@ -48,7 +52,7 @@ public final class ActivityMainBinding implements ViewBinding {
   public final MaterialCardView cardProfile;
 
   @NonNull
-  public final ExtendedFloatingActionButton fabAddDoctor;
+  public final FloatingActionButton fabAddDoctor;
 
   @NonNull
   public final View profileImageMock;
@@ -63,21 +67,26 @@ public final class ActivityMainBinding implements ViewBinding {
   public final TextView tvUserAge;
 
   @NonNull
+  public final TextView tvUserBloodGroup;
+
+  @NonNull
   public final TextView tvUserId;
 
   @NonNull
   public final TextView tvUserName;
 
   private ActivityMainBinding(@NonNull ConstraintLayout rootView,
-      @NonNull AppBarLayout appBarLayout, @NonNull ImageButton btnEditProfile,
-      @NonNull MaterialButton btnSimulateAlerts, @NonNull TextView btnViewAllDoctors,
-      @NonNull MaterialCardView cardAppointments, @NonNull MaterialCardView cardEmergency,
-      @NonNull MaterialCardView cardProfile, @NonNull ExtendedFloatingActionButton fabAddDoctor,
-      @NonNull View profileImageMock, @NonNull RecyclerView rvDoctors,
-      @NonNull MaterialToolbar toolbar, @NonNull TextView tvUserAge, @NonNull TextView tvUserId,
+      @NonNull AppBarLayout appBarLayout, @NonNull BottomNavigationView bottomNavigation,
+      @NonNull ImageButton btnEditProfile, @NonNull MaterialButton btnSimulateAlerts,
+      @NonNull TextView btnViewAllDoctors, @NonNull MaterialCardView cardAppointments,
+      @NonNull MaterialCardView cardEmergency, @NonNull MaterialCardView cardProfile,
+      @NonNull FloatingActionButton fabAddDoctor, @NonNull View profileImageMock,
+      @NonNull RecyclerView rvDoctors, @NonNull MaterialToolbar toolbar,
+      @NonNull TextView tvUserAge, @NonNull TextView tvUserBloodGroup, @NonNull TextView tvUserId,
       @NonNull TextView tvUserName) {
     this.rootView = rootView;
     this.appBarLayout = appBarLayout;
+    this.bottomNavigation = bottomNavigation;
     this.btnEditProfile = btnEditProfile;
     this.btnSimulateAlerts = btnSimulateAlerts;
     this.btnViewAllDoctors = btnViewAllDoctors;
@@ -89,6 +98,7 @@ public final class ActivityMainBinding implements ViewBinding {
     this.rvDoctors = rvDoctors;
     this.toolbar = toolbar;
     this.tvUserAge = tvUserAge;
+    this.tvUserBloodGroup = tvUserBloodGroup;
     this.tvUserId = tvUserId;
     this.tvUserName = tvUserName;
   }
@@ -123,6 +133,12 @@ public final class ActivityMainBinding implements ViewBinding {
       id = R.id.appBarLayout;
       AppBarLayout appBarLayout = ViewBindings.findChildViewById(rootView, id);
       if (appBarLayout == null) {
+        break missingId;
+      }
+
+      id = R.id.bottomNavigation;
+      BottomNavigationView bottomNavigation = ViewBindings.findChildViewById(rootView, id);
+      if (bottomNavigation == null) {
         break missingId;
       }
 
@@ -163,7 +179,7 @@ public final class ActivityMainBinding implements ViewBinding {
       }
 
       id = R.id.fabAddDoctor;
-      ExtendedFloatingActionButton fabAddDoctor = ViewBindings.findChildViewById(rootView, id);
+      FloatingActionButton fabAddDoctor = ViewBindings.findChildViewById(rootView, id);
       if (fabAddDoctor == null) {
         break missingId;
       }
@@ -192,6 +208,12 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tvUserBloodGroup;
+      TextView tvUserBloodGroup = ViewBindings.findChildViewById(rootView, id);
+      if (tvUserBloodGroup == null) {
+        break missingId;
+      }
+
       id = R.id.tvUserId;
       TextView tvUserId = ViewBindings.findChildViewById(rootView, id);
       if (tvUserId == null) {
@@ -204,9 +226,10 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityMainBinding((ConstraintLayout) rootView, appBarLayout, btnEditProfile,
-          btnSimulateAlerts, btnViewAllDoctors, cardAppointments, cardEmergency, cardProfile,
-          fabAddDoctor, profileImageMock, rvDoctors, toolbar, tvUserAge, tvUserId, tvUserName);
+      return new ActivityMainBinding((ConstraintLayout) rootView, appBarLayout, bottomNavigation,
+          btnEditProfile, btnSimulateAlerts, btnViewAllDoctors, cardAppointments, cardEmergency,
+          cardProfile, fabAddDoctor, profileImageMock, rvDoctors, toolbar, tvUserAge,
+          tvUserBloodGroup, tvUserId, tvUserName);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

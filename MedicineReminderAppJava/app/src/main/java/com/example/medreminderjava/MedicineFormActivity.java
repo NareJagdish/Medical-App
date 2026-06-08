@@ -1,6 +1,8 @@
 package com.example.medreminderjava;
 
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +14,8 @@ import com.example.medreminderjava.notification.AlarmReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 public class MedicineFormActivity extends AppCompatActivity {
 
@@ -21,6 +25,10 @@ public class MedicineFormActivity extends AppCompatActivity {
     private long medicineId = -1; // -1 indicates ADD mode
     private boolean isEditMode = false;
     private Medicine editMedicine;
+
+    private String breakfastTime = "08:00";
+    private String lunchTime = "13:30";
+    private String dinnerTime = "20:30";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,8 @@ public class MedicineFormActivity extends AppCompatActivity {
         }
         binding.toolbar.setNavigationOnClickListener(v -> finish());
 
+        setupListeners();
+
         if (isEditMode) {
             loadMedicineData();
         }
@@ -49,6 +59,60 @@ public class MedicineFormActivity extends AppCompatActivity {
         // Button clicks
         binding.btnCancel.setOnClickListener(v -> finish());
         binding.btnSave.setOnClickListener(v -> saveMedicine());
+    }
+
+    private void setupListeners() {
+        android.text.TextWatcher watcher = new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.tilMedicineName.setError(null);
+                binding.tilTimesPerDay.setError(null);
+                binding.tilDosagePerTime.setError(null);
+                binding.tilTotalQuantity.setError(null);
+            }
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        };
+        binding.etMedicineName.addTextChangedListener(watcher);
+        binding.etTimesPerDay.addTextChangedListener(watcher);
+        binding.etDosagePerTime.addTextChangedListener(watcher);
+        binding.etTotalQuantity.addTextChangedListener(watcher);
+
+        binding.cbBreakfast.setOnCheckedChangeListener((v, isChecked) -> 
+                binding.btnBreakfastTime.setVisibility(isChecked ? View.VISIBLE : View.GONE));
+        binding.cbLunch.setOnCheckedChangeListener((v, isChecked) -> 
+                binding.btnLunchTime.setVisibility(isChecked ? View.VISIBLE : View.GONE));
+        binding.cbDinner.setOnCheckedChangeListener((v, isChecked) -> 
+                binding.btnDinnerTime.setVisibility(isChecked ? View.VISIBLE : View.GONE));
+
+        binding.btnBreakfastTime.setOnClickListener(v -> showTimePicker("Breakfast"));
+        binding.btnLunchTime.setOnClickListener(v -> showTimePicker("Lunch"));
+        binding.btnDinnerTime.setOnClickListener(v -> showTimePicker("Dinner"));
+    }
+
+    private void showTimePicker(String mealType) {
+        String currentTime;
+        if (mealType.equals("Breakfast")) currentTime = breakfastTime;
+        else if (mealType.equals("Lunch")) currentTime = lunchTime;
+        else currentTime = dinnerTime;
+
+        String[] parts = currentTime.split(":");
+        int hour = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minuteOfHour) -> {
+            String selectedTime = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minuteOfHour);
+            if (mealType.equals("Breakfast")) {
+                breakfastTime = selectedTime;
+                binding.btnBreakfastTime.setText(selectedTime);
+            } else if (mealType.equals("Lunch")) {
+                lunchTime = selectedTime;
+                binding.btnLunchTime.setText(selectedTime);
+            } else {
+                dinnerTime = selectedTime;
+                binding.btnDinnerTime.setText(selectedTime);
+            }
+        }, hour, minute, true);
+        timePickerDialog.show();
     }
 
     private void loadMedicineData() {
@@ -76,55 +140,70 @@ public class MedicineFormActivity extends AppCompatActivity {
             binding.cbLunch.setChecked(meals.contains("Lunch"));
             binding.cbDinner.setChecked(meals.contains("Dinner"));
         }
+
+        if (editMedicine.getBreakfastTime() != null) {
+            breakfastTime = editMedicine.getBreakfastTime();
+            binding.btnBreakfastTime.setText(breakfastTime);
+        }
+        if (editMedicine.getLunchTime() != null) {
+            lunchTime = editMedicine.getLunchTime();
+            binding.btnLunchTime.setText(lunchTime);
+        }
+        if (editMedicine.getDinnerTime() != null) {
+            dinnerTime = editMedicine.getDinnerTime();
+            binding.btnDinnerTime.setText(dinnerTime);
+        }
     }
 
     private void saveMedicine() {
-        String name = binding.etMedicineName.getText().toString().trim();
-        String timesStr = binding.etTimesPerDay.getText().toString().trim();
-        String totalStr = binding.etTotalQuantity.getText().toString().trim();
-        String dosageStr = binding.etDosagePerTime.getText().toString().trim();
+        String name = Objects.requireNonNull(binding.etMedicineName.getText()).toString().trim();
+        String timesStr = Objects.requireNonNull(binding.etTimesPerDay.getText()).toString().trim();
+        String totalStr = Objects.requireNonNull(binding.etTotalQuantity.getText()).toString().trim();
+        String dosageStr = Objects.requireNonNull(binding.etDosagePerTime.getText()).toString().trim();
 
-        // Validation
+        boolean isValid = true;
         if (name.isEmpty()) {
-            binding.etMedicineName.setError("Name is required");
-            return;
+            binding.tilMedicineName.setError("Name is required");
+            isValid = false;
         }
 
-        int timesPerDay;
+        int timesPerDay = 0;
         try {
             timesPerDay = Integer.parseInt(timesStr);
             if (timesPerDay <= 0) {
-                binding.etTimesPerDay.setError("Must be greater than 0");
-                return;
+                binding.tilTimesPerDay.setError("Must be > 0");
+                isValid = false;
             }
         } catch (NumberFormatException e) {
-            binding.etTimesPerDay.setError("Invalid number");
-            return;
+            binding.tilTimesPerDay.setError("Invalid number");
+            isValid = false;
         }
 
-        int totalQty;
+        int totalQty = 0;
         try {
             totalQty = Integer.parseInt(totalStr);
             if (totalQty <= 0) {
-                binding.etTotalQuantity.setError("Must be greater than 0");
-                return;
+                binding.tilTotalQuantity.setError("Must be > 0");
+                isValid = false;
             }
         } catch (NumberFormatException e) {
-            binding.etTotalQuantity.setError("Invalid number");
-            return;
+            binding.tilTotalQuantity.setError("Invalid number");
+            isValid = false;
         }
 
-        int dosagePerTime;
+        int dosagePerTime = 0;
         try {
             dosagePerTime = Integer.parseInt(dosageStr);
             if (dosagePerTime <= 0) {
-                binding.etDosagePerTime.setError("Must be greater than 0");
-                return;
+                binding.tilDosagePerTime.setError("Must be > 0");
+                isValid = false;
             }
         } catch (NumberFormatException e) {
-            binding.etDosagePerTime.setError("Invalid number");
-            return;
+            binding.tilDosagePerTime.setError("Invalid number");
+            isValid = false;
         }
+
+        if (!isValid) return;
 
         // Meal Selection Validation
         List<String> selectedMeals = new ArrayList<>();
@@ -152,9 +231,6 @@ public class MedicineFormActivity extends AppCompatActivity {
             // Cancel old alarms
             AlarmReceiver.cancelAlarmsForMedicine(this, editMedicine);
 
-            // Determine remaining quantity.
-            // If they changed the total quantity, we set the remaining quantity to match the new total quantity.
-            // This functions as an automatic "refill" event. Otherwise, keep current remaining stock.
             int remainingQty = editMedicine.getRemainingQuantity();
             if (totalQty != editMedicine.getTotalQuantity()) {
                 remainingQty = totalQty;
@@ -162,7 +238,8 @@ public class MedicineFormActivity extends AppCompatActivity {
 
             // Update DB
             dbHelper.updateMedicine(medicineId, name, timesPerDay, timingRelation, 
-                    timingMeals, totalQty, dosagePerTime, remainingQty);
+                    timingMeals, totalQty, dosagePerTime, remainingQty, 
+                    breakfastTime, lunchTime, dinnerTime);
 
             // Schedule new alarms
             Medicine updatedMedicine = dbHelper.getMedicineById(medicineId);
@@ -172,9 +249,10 @@ public class MedicineFormActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Medicine updated", Toast.LENGTH_SHORT).show();
         } else {
-            // Add mode: remaining stock defaults to total starting quantity
+            // Add mode
             long newId = dbHelper.addMedicine(doctorId, name, timesPerDay, timingRelation, 
-                    timingMeals, totalQty, dosagePerTime, totalQty);
+                    timingMeals, totalQty, dosagePerTime, totalQty, 
+                    breakfastTime, lunchTime, dinnerTime);
 
             // Schedule alarms for the new medicine
             Medicine newMedicine = dbHelper.getMedicineById(newId);
@@ -185,7 +263,7 @@ public class MedicineFormActivity extends AppCompatActivity {
             Toast.makeText(this, "Medicine added", Toast.LENGTH_SHORT).show();
         }
 
-        // Run stock warnings check immediately to trigger low stock notification if applicable
+        // Run stock warnings check immediately
         AlarmReceiver.checkAllMedicinesAndNotify(this);
 
         finish();

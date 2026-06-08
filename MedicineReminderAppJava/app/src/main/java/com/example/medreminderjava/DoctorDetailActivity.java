@@ -83,7 +83,7 @@ public class DoctorDetailActivity extends AppCompatActivity implements MedicineA
             binding.tvEmptyMedicines.setVisibility(View.VISIBLE);
             binding.rvMedicines.setVisibility(View.GONE);
             binding.tvDetailRemainingSummary.setText("No medicines prescribed yet.");
-            binding.tvDetailRemainingSummary.setTextColor(getColor(R.color.grey_dark));
+            binding.tvDetailRemainingSummary.setTextColor(getColor(R.color.text_secondary));
         } else {
             binding.tvEmptyMedicines.setVisibility(View.GONE);
             binding.rvMedicines.setVisibility(View.VISIBLE);
@@ -95,16 +95,16 @@ public class DoctorDetailActivity extends AppCompatActivity implements MedicineA
             int minRemainingDays = dbHelper.getDoctorMinRemainingDays(doctorId);
             if (minRemainingDays == 0) {
                 binding.tvDetailRemainingSummary.setText("Alert: Out of stock! Please refill immediately.");
-                binding.tvDetailRemainingSummary.setTextColor(getColor(R.color.alert_danger));
+                binding.tvDetailRemainingSummary.setTextColor(getColor(R.color.error));
             } else if (minRemainingDays <= 2) {
                 binding.tvDetailRemainingSummary.setText("Critical: " + minRemainingDays + " days remaining. Buy medicines!");
-                binding.tvDetailRemainingSummary.setTextColor(getColor(R.color.alert_danger));
+                binding.tvDetailRemainingSummary.setTextColor(getColor(R.color.error));
             } else if (minRemainingDays <= 10) {
                 binding.tvDetailRemainingSummary.setText("Warning: " + minRemainingDays + " days remaining. Refill soon.");
-                binding.tvDetailRemainingSummary.setTextColor(getColor(R.color.alert_warning));
+                binding.tvDetailRemainingSummary.setTextColor(getColor(R.color.warning));
             } else {
                 binding.tvDetailRemainingSummary.setText("Status: " + minRemainingDays + " days remaining.");
-                binding.tvDetailRemainingSummary.setTextColor(getColor(R.color.alert_ok));
+                binding.tvDetailRemainingSummary.setTextColor(getColor(R.color.success));
             }
         }
     }

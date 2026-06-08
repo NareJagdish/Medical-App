@@ -11,6 +11,7 @@ import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.medreminderjava.R;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -31,14 +32,32 @@ public final class DialogAddDoctorBinding implements ViewBinding {
   @NonNull
   public final TextInputEditText etHospitalLocation;
 
+  @NonNull
+  public final TextInputLayout tilDoctorEmail;
+
+  @NonNull
+  public final TextInputLayout tilDoctorName;
+
+  @NonNull
+  public final TextInputLayout tilHospitalContact;
+
+  @NonNull
+  public final TextInputLayout tilHospitalLocation;
+
   private DialogAddDoctorBinding(@NonNull ScrollView rootView,
       @NonNull TextInputEditText etDoctorEmail, @NonNull TextInputEditText etDoctorName,
-      @NonNull TextInputEditText etHospitalContact, @NonNull TextInputEditText etHospitalLocation) {
+      @NonNull TextInputEditText etHospitalContact, @NonNull TextInputEditText etHospitalLocation,
+      @NonNull TextInputLayout tilDoctorEmail, @NonNull TextInputLayout tilDoctorName,
+      @NonNull TextInputLayout tilHospitalContact, @NonNull TextInputLayout tilHospitalLocation) {
     this.rootView = rootView;
     this.etDoctorEmail = etDoctorEmail;
     this.etDoctorName = etDoctorName;
     this.etHospitalContact = etHospitalContact;
     this.etHospitalLocation = etHospitalLocation;
+    this.tilDoctorEmail = tilDoctorEmail;
+    this.tilDoctorName = tilDoctorName;
+    this.tilHospitalContact = tilHospitalContact;
+    this.tilHospitalLocation = tilHospitalLocation;
   }
 
   @Override
@@ -92,8 +111,33 @@ public final class DialogAddDoctorBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tilDoctorEmail;
+      TextInputLayout tilDoctorEmail = ViewBindings.findChildViewById(rootView, id);
+      if (tilDoctorEmail == null) {
+        break missingId;
+      }
+
+      id = R.id.tilDoctorName;
+      TextInputLayout tilDoctorName = ViewBindings.findChildViewById(rootView, id);
+      if (tilDoctorName == null) {
+        break missingId;
+      }
+
+      id = R.id.tilHospitalContact;
+      TextInputLayout tilHospitalContact = ViewBindings.findChildViewById(rootView, id);
+      if (tilHospitalContact == null) {
+        break missingId;
+      }
+
+      id = R.id.tilHospitalLocation;
+      TextInputLayout tilHospitalLocation = ViewBindings.findChildViewById(rootView, id);
+      if (tilHospitalLocation == null) {
+        break missingId;
+      }
+
       return new DialogAddDoctorBinding((ScrollView) rootView, etDoctorEmail, etDoctorName,
-          etHospitalContact, etHospitalLocation);
+          etHospitalContact, etHospitalLocation, tilDoctorEmail, tilDoctorName, tilHospitalContact,
+          tilHospitalLocation);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

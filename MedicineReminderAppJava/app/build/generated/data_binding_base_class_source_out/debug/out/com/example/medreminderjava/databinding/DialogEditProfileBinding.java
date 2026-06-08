@@ -4,23 +4,33 @@ package com.example.medreminderjava.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.medreminderjava.R;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
 
 public final class DialogEditProfileBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final NestedScrollView rootView;
 
   @NonNull
   public final TextInputEditText etAge;
+
+  @NonNull
+  public final TextInputEditText etAltMobile;
+
+  @NonNull
+  public final TextInputEditText etBloodGroup;
+
+  @NonNull
+  public final TextInputEditText etLocation;
 
   @NonNull
   public final TextInputEditText etName;
@@ -28,17 +38,49 @@ public final class DialogEditProfileBinding implements ViewBinding {
   @NonNull
   public final TextInputEditText etUserId;
 
-  private DialogEditProfileBinding(@NonNull LinearLayout rootView, @NonNull TextInputEditText etAge,
-      @NonNull TextInputEditText etName, @NonNull TextInputEditText etUserId) {
+  @NonNull
+  public final TextInputLayout tilAge;
+
+  @NonNull
+  public final TextInputLayout tilAltMobile;
+
+  @NonNull
+  public final TextInputLayout tilBloodGroup;
+
+  @NonNull
+  public final TextInputLayout tilLocation;
+
+  @NonNull
+  public final TextInputLayout tilName;
+
+  @NonNull
+  public final TextInputLayout tilUserId;
+
+  private DialogEditProfileBinding(@NonNull NestedScrollView rootView,
+      @NonNull TextInputEditText etAge, @NonNull TextInputEditText etAltMobile,
+      @NonNull TextInputEditText etBloodGroup, @NonNull TextInputEditText etLocation,
+      @NonNull TextInputEditText etName, @NonNull TextInputEditText etUserId,
+      @NonNull TextInputLayout tilAge, @NonNull TextInputLayout tilAltMobile,
+      @NonNull TextInputLayout tilBloodGroup, @NonNull TextInputLayout tilLocation,
+      @NonNull TextInputLayout tilName, @NonNull TextInputLayout tilUserId) {
     this.rootView = rootView;
     this.etAge = etAge;
+    this.etAltMobile = etAltMobile;
+    this.etBloodGroup = etBloodGroup;
+    this.etLocation = etLocation;
     this.etName = etName;
     this.etUserId = etUserId;
+    this.tilAge = tilAge;
+    this.tilAltMobile = tilAltMobile;
+    this.tilBloodGroup = tilBloodGroup;
+    this.tilLocation = tilLocation;
+    this.tilName = tilName;
+    this.tilUserId = tilUserId;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public NestedScrollView getRoot() {
     return rootView;
   }
 
@@ -69,6 +111,24 @@ public final class DialogEditProfileBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.etAltMobile;
+      TextInputEditText etAltMobile = ViewBindings.findChildViewById(rootView, id);
+      if (etAltMobile == null) {
+        break missingId;
+      }
+
+      id = R.id.etBloodGroup;
+      TextInputEditText etBloodGroup = ViewBindings.findChildViewById(rootView, id);
+      if (etBloodGroup == null) {
+        break missingId;
+      }
+
+      id = R.id.etLocation;
+      TextInputEditText etLocation = ViewBindings.findChildViewById(rootView, id);
+      if (etLocation == null) {
+        break missingId;
+      }
+
       id = R.id.etName;
       TextInputEditText etName = ViewBindings.findChildViewById(rootView, id);
       if (etName == null) {
@@ -81,7 +141,45 @@ public final class DialogEditProfileBinding implements ViewBinding {
         break missingId;
       }
 
-      return new DialogEditProfileBinding((LinearLayout) rootView, etAge, etName, etUserId);
+      id = R.id.tilAge;
+      TextInputLayout tilAge = ViewBindings.findChildViewById(rootView, id);
+      if (tilAge == null) {
+        break missingId;
+      }
+
+      id = R.id.tilAltMobile;
+      TextInputLayout tilAltMobile = ViewBindings.findChildViewById(rootView, id);
+      if (tilAltMobile == null) {
+        break missingId;
+      }
+
+      id = R.id.tilBloodGroup;
+      TextInputLayout tilBloodGroup = ViewBindings.findChildViewById(rootView, id);
+      if (tilBloodGroup == null) {
+        break missingId;
+      }
+
+      id = R.id.tilLocation;
+      TextInputLayout tilLocation = ViewBindings.findChildViewById(rootView, id);
+      if (tilLocation == null) {
+        break missingId;
+      }
+
+      id = R.id.tilName;
+      TextInputLayout tilName = ViewBindings.findChildViewById(rootView, id);
+      if (tilName == null) {
+        break missingId;
+      }
+
+      id = R.id.tilUserId;
+      TextInputLayout tilUserId = ViewBindings.findChildViewById(rootView, id);
+      if (tilUserId == null) {
+        break missingId;
+      }
+
+      return new DialogEditProfileBinding((NestedScrollView) rootView, etAge, etAltMobile,
+          etBloodGroup, etLocation, etName, etUserId, tilAge, tilAltMobile, tilBloodGroup,
+          tilLocation, tilName, tilUserId);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

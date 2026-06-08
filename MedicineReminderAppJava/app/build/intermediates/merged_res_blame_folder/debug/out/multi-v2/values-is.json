@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.medreminderjava.app-mergeDebugResources-2:/values-is/values-is.xml",
+            "outputFile": "com.example.medreminderjava.app-mergeDebugResources-30:/values-is/values-is.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Lenovo\\.gradle\\caches\\transforms-3\\75919e89ab9acfe92b320b18b5eba894\\transformed\\core-1.9.0\\res\\values-is\\values-is.xml",

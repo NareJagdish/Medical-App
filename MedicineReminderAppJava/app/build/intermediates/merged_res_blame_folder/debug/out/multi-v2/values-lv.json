@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.medreminderjava.app-mergeDebugResources-2:/values-lv/values-lv.xml",
+            "outputFile": "com.example.medreminderjava.app-mergeDebugResources-30:/values-lv/values-lv.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Lenovo\\.gradle\\caches\\transforms-3\\2b09c2cd4192fe4b7b686a651ae8eff3\\transformed\\material-1.11.0\\res\\values-lv\\values-lv.xml",

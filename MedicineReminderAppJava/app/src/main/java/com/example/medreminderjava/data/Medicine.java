@@ -11,10 +11,15 @@ public class Medicine {
     private final int dosagePerTime;
     private final int remainingQuantity;
     private final long startDate;
+    
+    private final String breakfastTime;
+    private final String lunchTime;
+    private final String dinnerTime;
 
     public Medicine(long id, long doctorId, String name, int timesPerDay, 
                     String timingRelation, String timingMeals, 
-                    int totalQuantity, int dosagePerTime, int remainingQuantity, long startDate) {
+                    int totalQuantity, int dosagePerTime, int remainingQuantity, long startDate,
+                    String breakfastTime, String lunchTime, String dinnerTime) {
         this.id = id;
         this.doctorId = doctorId;
         this.name = name;
@@ -25,6 +30,9 @@ public class Medicine {
         this.dosagePerTime = dosagePerTime;
         this.remainingQuantity = remainingQuantity;
         this.startDate = startDate;
+        this.breakfastTime = breakfastTime;
+        this.lunchTime = lunchTime;
+        this.dinnerTime = dinnerTime;
     }
 
     public long getId() {
@@ -65,6 +73,18 @@ public class Medicine {
 
     public long getStartDate() {
         return startDate;
+    }
+
+    public String getBreakfastTime() {
+        return breakfastTime;
+    }
+
+    public String getLunchTime() {
+        return lunchTime;
+    }
+
+    public String getDinnerTime() {
+        return dinnerTime;
     }
 
     /**

@@ -1,70 +1,98 @@
 [
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\drawable_ic_launcher_foreground.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\drawable\\ic_launcher_foreground.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\layout_activity_medicine_form.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\layout\\activity_medicine_form.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\layout_activity_medicine_form.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\activity_medicine_form.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\drawable_ic_launcher.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\drawable\\ic_launcher.xml"
     },
     {
-        "merged": "com.example.medreminderjava.app-merged_res-4:/layout_dialog_add_doctor.xml.flat",
-        "source": "com.example.medreminderjava.app-main-6:/layout/dialog_add_doctor.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\layout\\activity_main.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\drawable_badge_bg_danger.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\drawable\\badge_bg_danger.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\drawable\\ic_launcher_background.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\drawable_shape_round_rect_cyan_border.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\drawable\\shape_round_rect_cyan_border.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\layout_activity_login.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\layout\\activity_login.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\layout_item_medicine.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\item_medicine.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\layout_dialog_meal_times.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\layout\\dialog_meal_times.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\drawable_ic_launcher.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\drawable\\ic_launcher.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\drawable_badge_bg_warning.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\drawable\\badge_bg_warning.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\layout_activity_doctor_detail.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\activity_doctor_detail.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\layout_item_medicine.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\layout\\item_medicine.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\layout_activity_main.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\activity_main.xml"
+        "merged": "com.example.medreminderjava.app-merged_res-32:/layout_activity_register.xml.flat",
+        "source": "com.example.medreminderjava.app-main-34:/layout/activity_register.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\layout_item_doctor.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\item_doctor.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\menu_bottom_nav_menu.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\menu\\bottom_nav_menu.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\drawable_shape_circle_accent.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\drawable\\shape_circle_accent.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\menu_main_menu.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\menu\\main_menu.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\layout_dialog_edit_profile.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\dialog_edit_profile.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\layout_activity_register.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\layout\\activity_register.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\drawable_ic_launcher_background.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\drawable\\ic_launcher_background.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\drawable_badge_bg_normal.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\drawable\\badge_bg_normal.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\layout_dialog_add_doctor.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\layout\\dialog_add_doctor.xml"
+        "merged": "com.example.medreminderjava.app-merged_res-32:/layout_dialog_add_doctor.xml.flat",
+        "source": "com.example.medreminderjava.app-main-34:/layout/dialog_add_doctor.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\drawable_badge_bg_normal.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\drawable\\badge_bg_normal.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\layout_activity_doctor_detail.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\layout\\activity_doctor_detail.xml"
     },
     {
-        "merged": "com.example.medreminderjava.app-merged_res-4:/layout_activity_main.xml.flat",
-        "source": "com.example.medreminderjava.app-main-6:/layout/activity_main.xml"
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\layout_dialog_add_doctor.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\layout\\dialog_add_doctor.xml"
     },
     {
-        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-4:\\drawable_badge_bg_warning.xml.flat",
-        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-6:\\drawable\\badge_bg_warning.xml"
+        "merged": "com.example.medreminderjava.app-merged_res-32:/layout_dialog_edit_profile.xml.flat",
+        "source": "com.example.medreminderjava.app-main-34:/layout/dialog_edit_profile.xml"
+    },
+    {
+        "merged": "com.example.medreminderjava.app-merged_res-32:/layout_activity_medicine_form.xml.flat",
+        "source": "com.example.medreminderjava.app-main-34:/layout/activity_medicine_form.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\drawable_shape_round_rect_cyan_border.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\drawable\\shape_round_rect_cyan_border.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\drawable_badge_bg_danger.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\drawable\\badge_bg_danger.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\layout_item_doctor.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\layout\\item_doctor.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\drawable_shape_circle_accent.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\drawable\\shape_circle_accent.xml"
+    },
+    {
+        "merged": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\layout_dialog_edit_profile.xml.flat",
+        "source": "C:\\Users\\Lenovo\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\layout\\dialog_edit_profile.xml"
     }
 ]

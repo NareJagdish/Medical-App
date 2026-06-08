@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.medreminderjava.app-mergeDebugResources-2:/values-en-rXC/values-en-rXC.xml",
+            "outputFile": "com.example.medreminderjava.app-mergeDebugResources-30:/values-en-rXC/values-en-rXC.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Lenovo\\.gradle\\caches\\transforms-3\\1269e761ba2b2764df14d796e474c793\\transformed\\appcompat-1.6.1\\res\\values-en-rXC\\values-en-rXC.xml",

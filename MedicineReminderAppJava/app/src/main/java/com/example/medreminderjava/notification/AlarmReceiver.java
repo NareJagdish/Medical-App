@@ -5,9 +5,12 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.util.Log;
 
 import com.example.medreminderjava.data.DatabaseHelper;
+import com.example.medreminderjava.data.DbContract;
 import com.example.medreminderjava.data.Medicine;
 
 import java.util.Calendar;
@@ -24,16 +27,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     public static final String EXTRA_MEDICINE_NAME = "extra_medicine_name";
     public static final String EXTRA_TIMING_INFO = "extra_timing_info";
 
-    // Approximate hour schedules for meals
-    private static final int HOUR_BREAKFAST = 8;
-    private static final int MINUTE_BREAKFAST = 0;
-
-    private static final int HOUR_LUNCH = 13;
-    private static final int MINUTE_LUNCH = 30;
-
-    private static final int HOUR_DINNER = 20;
-    private static final int MINUTE_DINNER = 30;
-
+    public static final String PREFS_NAME = "UserPrefs";
+    private static final String KEY_LOGGED_IN_MOBILE = "logged_in_mobile";
+    
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
@@ -50,40 +46,49 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             if (medicineId != -1 && medicineName != null) {
                 NotificationHelper.sendDoseNotification(context, medicineId, medicineName, timingInfo);
+                sendSmsToAlternateNumber(context, medicineName, timingInfo);
             }
         } else if (ACTION_ALARM_DAILY_CHECK.equals(action) || Intent.ACTION_BOOT_COMPLETED.equals(action)) {
-            // Perform remaining days notification check
             checkAllMedicinesAndNotify(context);
-
-            // If boot completed, reschedule all exact dose alarms
             if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
                 rescheduleAllAlarms(context);
             }
         }
     }
 
-    /**
-     * Scans database and triggers notifications if medicine is running low (10, 5, 2, or 0 days remaining).
-     */
+    private void sendSmsToAlternateNumber(Context context, String medicineName, String timingInfo) {
+        SharedPreferences sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String loggedInMobile = sharedPrefs.getString(KEY_LOGGED_IN_MOBILE, "");
+        
+        if (loggedInMobile.isEmpty()) return;
+
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
+        Cursor cursor = dbHelper.getUserByMobile(loggedInMobile);
+        if (cursor != null && cursor.moveToFirst()) {
+            String altMobile = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.UserEntry.COLUMN_ALT_MOBILE));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.UserEntry.COLUMN_NAME));
+            
+            if (altMobile != null && !altMobile.isEmpty()) {
+                String message = "Medicine Reminder for " + name + ": It's time to take " + medicineName + " (" + timingInfo + ").";
+                NotificationHelper.sendSmsNotification(context, altMobile, message);
+                Log.d(TAG, "SMS reminder sent to " + altMobile);
+            }
+        }
+        if (cursor != null) cursor.close();
+    }
+
     public static void checkAllMedicinesAndNotify(Context context) {
-        Log.d(TAG, "checkAllMedicinesAndNotify scanning database...");
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
         List<Medicine> medicines = dbHelper.getAllMedicines();
 
         for (Medicine medicine : medicines) {
             int remainingDays = medicine.getRemainingDays();
-            Log.d(TAG, "Medicine '" + medicine.getName() + "': remainingDays = " + remainingDays);
-
-            // Check if days remaining matches any target thresholds
             if (remainingDays == 10 || remainingDays == 5 || remainingDays == 2 || remainingDays == 0) {
                 NotificationHelper.sendStockNotification(context, medicine.getId(), medicine.getName(), remainingDays);
             }
         }
     }
 
-    /**
-     * Schedules the daily stock alert check.
-     */
     public static void scheduleDailyCheck(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
@@ -92,41 +97,28 @@ public class AlarmReceiver extends BroadcastReceiver {
         intent.setAction(ACTION_ALARM_DAILY_CHECK);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context,
-                999, // Unique request code for daily check
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
+                context, 999, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 9); // Run check at 9:00 AM every day
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
-        // If time already passed today, set for tomorrow
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
 
         alarmManager.setInexactRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
-                pendingIntent
-        );
-        Log.d(TAG, "Daily inventory check alarm scheduled.");
+                AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
-    /**
-     * Registers AlarmManager alarms for a specific medicine based on meal options.
-     */
     public static void scheduleDoseAlarms(Context context, Medicine medicine) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
-        String meals = medicine.getTimingMeals(); // e.g. "Breakfast,Dinner"
-        String relation = medicine.getTimingRelation(); // e.g. "Before"
+        String meals = medicine.getTimingMeals();
+        String relation = medicine.getTimingRelation();
 
         if (meals == null || meals.trim().isEmpty()) return;
 
@@ -135,15 +127,20 @@ public class AlarmReceiver extends BroadcastReceiver {
             meal = meal.trim();
             int hour = 8, minute = 0;
 
-            if ("Breakfast".equalsIgnoreCase(meal)) {
-                hour = HOUR_BREAKFAST;
-                minute = MINUTE_BREAKFAST;
-            } else if ("Lunch".equalsIgnoreCase(meal)) {
-                hour = HOUR_LUNCH;
-                minute = MINUTE_LUNCH;
-            } else if ("Dinner".equalsIgnoreCase(meal)) {
-                hour = HOUR_DINNER;
-                minute = MINUTE_DINNER;
+            String timeStr = null;
+            if ("Breakfast".equalsIgnoreCase(meal)) timeStr = medicine.getBreakfastTime();
+            else if ("Lunch".equalsIgnoreCase(meal)) timeStr = medicine.getLunchTime();
+            else if ("Dinner".equalsIgnoreCase(meal)) timeStr = medicine.getDinnerTime();
+
+            if (timeStr != null && timeStr.contains(":")) {
+                String[] parts = timeStr.split(":");
+                hour = Integer.parseInt(parts[0]);
+                minute = Integer.parseInt(parts[1]);
+            } else {
+                // Fallback defaults if no time set in medicine object
+                if ("Breakfast".equalsIgnoreCase(meal)) { hour = 8; minute = 0; }
+                else if ("Lunch".equalsIgnoreCase(meal)) { hour = 13; minute = 30; }
+                else if ("Dinner".equalsIgnoreCase(meal)) { hour = 20; minute = 30; }
             }
 
             int requestCode = getUniqueRequestCode(medicine.getId(), meal);
@@ -155,11 +152,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             intent.putExtra(EXTRA_TIMING_INFO, relation + " " + meal);
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    requestCode,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-            );
+                    context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
@@ -167,25 +160,16 @@ public class AlarmReceiver extends BroadcastReceiver {
             calendar.set(Calendar.MINUTE, minute);
             calendar.set(Calendar.SECOND, 0);
 
-            // If scheduled time already passed today, set for tomorrow
             if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
             }
 
-            // Set exact repeating alarm
             alarmManager.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    AlarmManager.INTERVAL_DAY,
-                    pendingIntent
-            );
+                    AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
             Log.d(TAG, "Scheduled dose alarm for " + medicine.getName() + " at " + hour + ":" + minute + " (Meal: " + meal + ")");
         }
     }
 
-    /**
-     * Cancels any scheduled alarms for a specific medicine.
-     */
     public static void cancelAlarmsForMedicine(Context context, Medicine medicine) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
@@ -197,25 +181,16 @@ public class AlarmReceiver extends BroadcastReceiver {
             intent.setAction(ACTION_ALARM_DOSE);
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                    context,
-                    requestCode,
-                    intent,
-                    PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE
-            );
+                    context, requestCode, intent, PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE);
 
             if (pendingIntent != null) {
                 alarmManager.cancel(pendingIntent);
                 pendingIntent.cancel();
-                Log.d(TAG, "Cancelled alarm for medicine " + medicine.getName() + " meal: " + meal);
             }
         }
     }
 
-    /**
-     * Reschedules all alarms for all medicines in the database (typically on device reboot).
-     */
     public static void rescheduleAllAlarms(Context context) {
-        Log.d(TAG, "Rescheduling all alarms from database...");
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
         List<Medicine> medicines = dbHelper.getAllMedicines();
         for (Medicine medicine : medicines) {
@@ -224,9 +199,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         scheduleDailyCheck(context);
     }
 
-    /**
-     * Generates a unique integer code for PendingIntent request codes.
-     */
     private static int getUniqueRequestCode(long medicineId, String mealName) {
         int mealHash = mealName.hashCode();
         return (int) (medicineId * 31 + Math.abs(mealHash % 1000));

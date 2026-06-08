@@ -6,11 +6,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.telephony.SmsManager;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.medreminderjava.MainActivity;
+import com.example.medreminderjava.R;
 
 public class NotificationHelper {
 
@@ -74,8 +76,6 @@ public class NotificationHelper {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         try {
-            // Check for notification permission on Android 13+ is done in activities, 
-            // but we call notify inside a try-catch or after checking permission to avoid crash
             notificationManager.notify(DOSE_NOTIFICATION_ID_OFFSET + (int) medicineId, builder.build());
         } catch (SecurityException e) {
             e.printStackTrace();
@@ -118,6 +118,28 @@ public class NotificationHelper {
         try {
             notificationManager.notify(STOCK_NOTIFICATION_ID_OFFSET + (int) medicineId, builder.build());
         } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Sends an SMS notification to the alternate mobile number.
+     */
+    public static void sendSmsNotification(Context context, String mobileNumber, String message) {
+        if (mobileNumber == null || mobileNumber.isEmpty()) return;
+
+        try {
+            SmsManager smsManager;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                smsManager = context.getSystemService(SmsManager.class);
+            } else {
+                smsManager = SmsManager.getDefault();
+            }
+            
+            if (smsManager != null) {
+                smsManager.sendTextMessage(mobileNumber, null, message, null, null);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

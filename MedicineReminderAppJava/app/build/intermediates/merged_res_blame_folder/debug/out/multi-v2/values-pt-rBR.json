@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.medreminderjava.app-mergeDebugResources-2:/values-pt-rBR/values-pt-rBR.xml",
+            "outputFile": "com.example.medreminderjava.app-mergeDebugResources-30:/values-pt-rBR/values-pt-rBR.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Lenovo\\.gradle\\caches\\transforms-3\\2b09c2cd4192fe4b7b686a651ae8eff3\\transformed\\material-1.11.0\\res\\values-pt-rBR\\values-pt-rBR.xml",

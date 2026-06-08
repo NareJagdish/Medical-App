@@ -4,6 +4,7 @@ package com.example.medreminderjava.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -18,6 +19,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
@@ -30,7 +32,16 @@ public final class ActivityMedicineFormBinding implements ViewBinding {
   public final AppBarLayout appBarLayout;
 
   @NonNull
+  public final Button btnBreakfastTime;
+
+  @NonNull
   public final MaterialButton btnCancel;
+
+  @NonNull
+  public final Button btnDinnerTime;
+
+  @NonNull
+  public final Button btnLunchTime;
 
   @NonNull
   public final MaterialButton btnSave;
@@ -69,19 +80,38 @@ public final class ActivityMedicineFormBinding implements ViewBinding {
   public final RadioGroup rgMealRelation;
 
   @NonNull
+  public final TextInputLayout tilDosagePerTime;
+
+  @NonNull
+  public final TextInputLayout tilMedicineName;
+
+  @NonNull
+  public final TextInputLayout tilTimesPerDay;
+
+  @NonNull
+  public final TextInputLayout tilTotalQuantity;
+
+  @NonNull
   public final MaterialToolbar toolbar;
 
   private ActivityMedicineFormBinding(@NonNull ConstraintLayout rootView,
-      @NonNull AppBarLayout appBarLayout, @NonNull MaterialButton btnCancel,
-      @NonNull MaterialButton btnSave, @NonNull CheckBox cbBreakfast, @NonNull CheckBox cbDinner,
-      @NonNull CheckBox cbLunch, @NonNull TextInputEditText etDosagePerTime,
-      @NonNull TextInputEditText etMedicineName, @NonNull TextInputEditText etTimesPerDay,
-      @NonNull TextInputEditText etTotalQuantity, @NonNull LinearLayout layoutActions,
-      @NonNull RadioButton rbAfterMeal, @NonNull RadioButton rbBeforeMeal,
-      @NonNull RadioGroup rgMealRelation, @NonNull MaterialToolbar toolbar) {
+      @NonNull AppBarLayout appBarLayout, @NonNull Button btnBreakfastTime,
+      @NonNull MaterialButton btnCancel, @NonNull Button btnDinnerTime,
+      @NonNull Button btnLunchTime, @NonNull MaterialButton btnSave, @NonNull CheckBox cbBreakfast,
+      @NonNull CheckBox cbDinner, @NonNull CheckBox cbLunch,
+      @NonNull TextInputEditText etDosagePerTime, @NonNull TextInputEditText etMedicineName,
+      @NonNull TextInputEditText etTimesPerDay, @NonNull TextInputEditText etTotalQuantity,
+      @NonNull LinearLayout layoutActions, @NonNull RadioButton rbAfterMeal,
+      @NonNull RadioButton rbBeforeMeal, @NonNull RadioGroup rgMealRelation,
+      @NonNull TextInputLayout tilDosagePerTime, @NonNull TextInputLayout tilMedicineName,
+      @NonNull TextInputLayout tilTimesPerDay, @NonNull TextInputLayout tilTotalQuantity,
+      @NonNull MaterialToolbar toolbar) {
     this.rootView = rootView;
     this.appBarLayout = appBarLayout;
+    this.btnBreakfastTime = btnBreakfastTime;
     this.btnCancel = btnCancel;
+    this.btnDinnerTime = btnDinnerTime;
+    this.btnLunchTime = btnLunchTime;
     this.btnSave = btnSave;
     this.cbBreakfast = cbBreakfast;
     this.cbDinner = cbDinner;
@@ -94,6 +124,10 @@ public final class ActivityMedicineFormBinding implements ViewBinding {
     this.rbAfterMeal = rbAfterMeal;
     this.rbBeforeMeal = rbBeforeMeal;
     this.rgMealRelation = rgMealRelation;
+    this.tilDosagePerTime = tilDosagePerTime;
+    this.tilMedicineName = tilMedicineName;
+    this.tilTimesPerDay = tilTimesPerDay;
+    this.tilTotalQuantity = tilTotalQuantity;
     this.toolbar = toolbar;
   }
 
@@ -130,9 +164,27 @@ public final class ActivityMedicineFormBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.btnBreakfastTime;
+      Button btnBreakfastTime = ViewBindings.findChildViewById(rootView, id);
+      if (btnBreakfastTime == null) {
+        break missingId;
+      }
+
       id = R.id.btnCancel;
       MaterialButton btnCancel = ViewBindings.findChildViewById(rootView, id);
       if (btnCancel == null) {
+        break missingId;
+      }
+
+      id = R.id.btnDinnerTime;
+      Button btnDinnerTime = ViewBindings.findChildViewById(rootView, id);
+      if (btnDinnerTime == null) {
+        break missingId;
+      }
+
+      id = R.id.btnLunchTime;
+      Button btnLunchTime = ViewBindings.findChildViewById(rootView, id);
+      if (btnLunchTime == null) {
         break missingId;
       }
 
@@ -208,15 +260,41 @@ public final class ActivityMedicineFormBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tilDosagePerTime;
+      TextInputLayout tilDosagePerTime = ViewBindings.findChildViewById(rootView, id);
+      if (tilDosagePerTime == null) {
+        break missingId;
+      }
+
+      id = R.id.tilMedicineName;
+      TextInputLayout tilMedicineName = ViewBindings.findChildViewById(rootView, id);
+      if (tilMedicineName == null) {
+        break missingId;
+      }
+
+      id = R.id.tilTimesPerDay;
+      TextInputLayout tilTimesPerDay = ViewBindings.findChildViewById(rootView, id);
+      if (tilTimesPerDay == null) {
+        break missingId;
+      }
+
+      id = R.id.tilTotalQuantity;
+      TextInputLayout tilTotalQuantity = ViewBindings.findChildViewById(rootView, id);
+      if (tilTotalQuantity == null) {
+        break missingId;
+      }
+
       id = R.id.toolbar;
       MaterialToolbar toolbar = ViewBindings.findChildViewById(rootView, id);
       if (toolbar == null) {
         break missingId;
       }
 
-      return new ActivityMedicineFormBinding((ConstraintLayout) rootView, appBarLayout, btnCancel,
-          btnSave, cbBreakfast, cbDinner, cbLunch, etDosagePerTime, etMedicineName, etTimesPerDay,
-          etTotalQuantity, layoutActions, rbAfterMeal, rbBeforeMeal, rgMealRelation, toolbar);
+      return new ActivityMedicineFormBinding((ConstraintLayout) rootView, appBarLayout,
+          btnBreakfastTime, btnCancel, btnDinnerTime, btnLunchTime, btnSave, cbBreakfast, cbDinner,
+          cbLunch, etDosagePerTime, etMedicineName, etTimesPerDay, etTotalQuantity, layoutActions,
+          rbAfterMeal, rbBeforeMeal, rgMealRelation, tilDosagePerTime, tilMedicineName,
+          tilTimesPerDay, tilTotalQuantity, toolbar);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

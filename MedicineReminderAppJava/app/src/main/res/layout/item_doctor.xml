@@ -5,35 +5,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="6dp"
+    android:layout_marginVertical="8dp"
     app:cardCornerRadius="16dp"
-    app:cardBackgroundColor="@color/surface_dark"
+    app:cardBackgroundColor="@color/surface"
+    app:cardElevation="1dp"
     app:strokeWidth="1dp"
     app:strokeColor="@color/divider">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
+        android:padding="16dp"
         android:background="?attr/selectableItemBackground">
 
         <View
             android:id="@+id/avatarBg"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/shape_circle_accent"
-            android:alpha="0.2"
+            android:backgroundTint="@color/primary"
+            android:alpha="0.1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
             android:id="@+id/ivDoctorIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@android:drawable/ic_menu_my_calendar"
             android:contentDescription="Doctor"
-            app:tint="@color/accent_cyan"
+            app:tint="@color/primary"
             app:layout_constraintStart_toStartOf="@id/avatarBg"
             app:layout_constraintEnd_toEndOf="@id/avatarBg"
             app:layout_constraintTop_toTopOf="@id/avatarBg"
@@ -43,11 +45,11 @@
             android:id="@+id/tvDoctorName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:text="Dr. Deshmukh"
             android:textColor="@color/text_primary"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:maxLines="1"
             android:ellipsize="end"
@@ -63,7 +65,7 @@
             android:layout_height="wrap_content"
             android:text="3 medicines prescribed"
             android:textColor="@color/text_secondary"
-            android:textSize="12sp"
+            android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@id/tvDoctorName"
             app:layout_constraintTop_toBottomOf="@id/tvDoctorName"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,29 +75,29 @@
             android:id="@+id/cardBadge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="6dp"
+            app:cardCornerRadius="8dp"
             app:cardBackgroundColor="@color/divider"
             app:strokeWidth="0dp"
             app:layout_constraintEnd_toStartOf="@id/btnEditDoctor"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="4dp">
+            android:layout_marginEnd="8dp">
             <TextView
                 android:id="@+id/tvRemainingDaysBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="10d"
-                android:textColor="@color/accent_cyan"
-                android:textSize="11sp"
+                android:textColor="@color/primary"
+                android:textSize="12sp"
                 android:textStyle="bold"
-                android:paddingHorizontal="6dp"
-                android:paddingVertical="3dp" />
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp" />
         </com.google.android.material.card.MaterialCardView>
 
         <ImageButton
             android:id="@+id/btnEditDoctor"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_edit"
             android:contentDescription="Edit"
@@ -106,12 +108,12 @@
 
         <ImageButton
             android:id="@+id/btnDeleteDoctor"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_delete"
             android:contentDescription="Delete"
-            app:tint="@color/alert_danger"
+            app:tint="@color/error"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />

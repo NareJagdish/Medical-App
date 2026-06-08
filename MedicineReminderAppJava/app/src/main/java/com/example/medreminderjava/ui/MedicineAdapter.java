@@ -81,16 +81,16 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
             // Set alert badge styling based on remaining days
             if (medicine.getRemainingQuantity() <= 0 || daysLeft == 0) {
                 binding.tvMedicineDaysLeft.setText("Finished!");
-                binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.alert_danger));
+                binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.error));
             } else {
                 binding.tvMedicineDaysLeft.setText(daysLeft + " days left");
 
                 if (daysLeft <= 2) {
-                    binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.alert_danger));
+                    binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.error));
                 } else if (daysLeft <= 10) {
-                    binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.alert_warning));
+                    binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.warning));
                 } else {
-                    binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.alert_ok));
+                    binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.success));
                 }
             }
 
