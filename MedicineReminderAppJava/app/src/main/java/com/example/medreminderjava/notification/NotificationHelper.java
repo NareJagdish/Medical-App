@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.telephony.SmsManager;
 
@@ -55,23 +56,68 @@ public class NotificationHelper {
 
     /**
      * Sends a notification reminding the user to take a specific medicine.
+     * Uses setFullScreenIntent and adds interactive buttons: Skip, Snooze, Take.
      */
     public static void sendDoseNotification(Context context, long medicineId, String medicineName, String timingInfo) {
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
+        // Fetch User Name for personalized message
+        SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String mobile = prefs.getString("logged_in_mobile", "");
+        String userName = "there";
+        if (!mobile.isEmpty()) {
+            com.example.medreminderjava.data.DatabaseHelper dbHelper = com.example.medreminderjava.data.DatabaseHelper.getInstance(context);
+            android.database.Cursor cursor = dbHelper.getUserByMobile(mobile);
+            if (cursor != null && cursor.moveToFirst()) {
+                userName = cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_NAME));
+                cursor.close();
+            }
+        }
+
+        Intent fullScreenIntent = new Intent(context, com.example.medreminderjava.ReminderAlarmActivity.class);
+        fullScreenIntent.putExtra(AlarmReceiver.EXTRA_MEDICINE_ID, medicineId);
+        fullScreenIntent.putExtra(AlarmReceiver.EXTRA_MEDICINE_NAME, medicineName);
+        fullScreenIntent.putExtra(AlarmReceiver.EXTRA_TIMING_INFO, timingInfo);
+        fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(
                 context, 
                 (int) medicineId, 
-                intent, 
+                fullScreenIntent, 
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
+        // Action: Take
+        Intent takeIntent = new Intent(context, AlarmReceiver.class);
+        takeIntent.setAction(AlarmReceiver.ACTION_TAKE);
+        takeIntent.putExtra(AlarmReceiver.EXTRA_MEDICINE_ID, medicineId);
+        PendingIntent takePendingIntent = PendingIntent.getBroadcast(context, (int) medicineId + 10, takeIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        // Action: Skip
+        Intent skipIntent = new Intent(context, AlarmReceiver.class);
+        skipIntent.setAction(AlarmReceiver.ACTION_SKIP);
+        skipIntent.putExtra(AlarmReceiver.EXTRA_MEDICINE_ID, medicineId);
+        PendingIntent skipPendingIntent = PendingIntent.getBroadcast(context, (int) medicineId + 20, skipIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        // Action: Snooze
+        Intent snoozeIntent = new Intent(context, AlarmReceiver.class);
+        snoozeIntent.setAction(AlarmReceiver.ACTION_SNOOZE);
+        snoozeIntent.putExtra(AlarmReceiver.EXTRA_MEDICINE_ID, medicineId);
+        snoozeIntent.putExtra(AlarmReceiver.EXTRA_MEDICINE_NAME, medicineName);
+        snoozeIntent.putExtra(AlarmReceiver.EXTRA_TIMING_INFO, timingInfo);
+        PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(context, (int) medicineId + 30, snoozeIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_DOSE_ID)
-                .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
-                .setContentTitle("Medicine Reminder")
-                .setContentText("It is time to take " + medicineName + " (" + timingInfo + ").")
+                .setSmallIcon(R.drawable.ic_launcher_foreground) // Use app icon
+                .setContentTitle("Take Your Pills")
+                .setContentText("Hello " + userName + ", it's time to take " + medicineName)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .setBigContentTitle("Take Your Pills")
+                        .bigText("Hello " + userName + ", it's time to take " + medicineName + "\n" + timingInfo))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setContentIntent(pendingIntent)
+                .setFullScreenIntent(fullScreenPendingIntent, true)
+                .addAction(0, "Skip", skipPendingIntent)
+                .addAction(0, "Snooze", snoozePendingIntent)
+                .addAction(0, "Take", takePendingIntent)
                 .setAutoCancel(true);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
@@ -80,6 +126,11 @@ public class NotificationHelper {
         } catch (SecurityException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void cancelDoseNotification(Context context, long medicineId) {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.cancel(DOSE_NOTIFICATION_ID_OFFSET + (int) medicineId);
     }
 
     /**

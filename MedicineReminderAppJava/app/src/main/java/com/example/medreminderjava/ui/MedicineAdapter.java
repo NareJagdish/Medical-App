@@ -3,18 +3,16 @@ package com.example.medreminderjava.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medreminderjava.R;
-import com.example.medreminderjava.data.DatabaseHelper;
 import com.example.medreminderjava.data.Medicine;
-import com.example.medreminderjava.databinding.ItemMedicineBinding;
-import com.example.medreminderjava.notification.AlarmReceiver;
 
 import java.util.List;
 
@@ -37,9 +35,8 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
     @NonNull
     @Override
     public MedicineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemMedicineBinding binding = ItemMedicineBinding.inflate(
-                LayoutInflater.from(parent.getContext()), parent, false);
-        return new MedicineViewHolder(binding);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_medicine, parent, false);
+        return new MedicineViewHolder(view);
     }
 
     @Override
@@ -53,73 +50,45 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
     }
 
     class MedicineViewHolder extends RecyclerView.ViewHolder {
-        private final ItemMedicineBinding binding;
+        private final TextView tvMedicineName, tvFrequencyBadge, tvDosageDetails, tvStockStatus, tvMedicineDaysLeft;
+        private final View btnEditMedicine, btnDeleteMedicine;
 
-        public MedicineViewHolder(@NonNull ItemMedicineBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
+        public MedicineViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvMedicineName = itemView.findViewById(R.id.tvMedicineName);
+            tvFrequencyBadge = itemView.findViewById(R.id.tvFrequencyBadge);
+            tvDosageDetails = itemView.findViewById(R.id.tvDosageDetails);
+            tvStockStatus = itemView.findViewById(R.id.tvStockStatus);
+            tvMedicineDaysLeft = itemView.findViewById(R.id.tvMedicineDaysLeft);
+            btnEditMedicine = itemView.findViewById(R.id.btnEditMedicine);
+            btnDeleteMedicine = itemView.findViewById(R.id.btnDeleteMedicine);
         }
 
         @SuppressLint("SetTextI18n")
         public void bind(final Medicine medicine) {
-            Context context = binding.getRoot().getContext();
-            DatabaseHelper dbHelper = DatabaseHelper.getInstance(context);
+            Context context = itemView.getContext();
 
-            binding.tvMedicineName.setText(medicine.getName());
-            binding.tvFrequencyBadge.setText(medicine.getTimesPerDay() + "x Daily");
-
-            // Format timings and meals details (e.g. Dosage: 1 pill - After Breakfast, Dinner)
-            binding.tvDosageDetails.setText("Dosage: " + medicine.getDosagePerTime() 
-                    + " pill(s) - " + medicine.getTimingRelation() + " " + medicine.getTimingMeals());
-
-            // Display current stock levels
-            binding.tvStockStatus.setText("Stock: " + medicine.getRemainingQuantity() 
-                    + " / " + medicine.getTotalQuantity() + " pills remaining");
+            tvMedicineName.setText(medicine.getName());
+            tvFrequencyBadge.setText(medicine.getTimesPerDay() + "x Daily");
+            tvDosageDetails.setText("Dosage: " + medicine.getDosagePerTime() + " pill(s) - " + medicine.getTimingRelation() + " " + medicine.getTimingMeals());
+            tvStockStatus.setText("Stock: " + medicine.getRemainingQuantity() + " / " + medicine.getTotalQuantity() + " pills remaining");
 
             int daysLeft = medicine.getRemainingDays();
-
-            // Set alert badge styling based on remaining days
             if (medicine.getRemainingQuantity() <= 0 || daysLeft == 0) {
-                binding.tvMedicineDaysLeft.setText("Finished!");
-                binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.error));
+                tvMedicineDaysLeft.setText("Finished!");
+                tvMedicineDaysLeft.setVisibility(View.VISIBLE);
+                tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.error));
+            } else if (daysLeft <= 10) {
+                tvMedicineDaysLeft.setText(daysLeft + " days left");
+                tvMedicineDaysLeft.setVisibility(View.VISIBLE);
+                if (daysLeft <= 2) tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.error));
+                else tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.warning));
             } else {
-                binding.tvMedicineDaysLeft.setText(daysLeft + " days left");
-
-                if (daysLeft <= 2) {
-                    binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.error));
-                } else if (daysLeft <= 10) {
-                    binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.warning));
-                } else {
-                    binding.tvMedicineDaysLeft.setTextColor(ContextCompat.getColor(context, R.color.success));
-                }
+                tvMedicineDaysLeft.setVisibility(View.GONE);
             }
 
-            // Bind CRUD Action Listeners
-            binding.btnEditMedicine.setOnClickListener(v -> {
-                if (actionListener != null) {
-                    actionListener.onEditMedicine(medicine);
-                }
-            });
-
-            binding.btnDeleteMedicine.setOnClickListener(v -> {
-                if (actionListener != null) {
-                    actionListener.onDeleteMedicine(medicine);
-                }
-            });
-
-            // Bind Dose Taken button (deducts stock and updates views)
-            binding.btnTakeDose.setEnabled(medicine.getRemainingQuantity() > 0);
-            binding.btnTakeDose.setOnClickListener(v -> {
-                int newQty = dbHelper.deductMedicineDose(medicine.getId());
-                Toast.makeText(context, "Logged dose for " + medicine.getName() + ". Remaining: " + newQty, Toast.LENGTH_SHORT).show();
-
-                // Trigger a run of the notification logic to post alarms immediately if threshold is hit
-                AlarmReceiver.checkAllMedicinesAndNotify(context);
-
-                if (actionListener != null) {
-                    actionListener.onDoseDeducted();
-                }
-            });
+            btnEditMedicine.setOnClickListener(v -> { if (actionListener != null) actionListener.onEditMedicine(medicine); });
+            btnDeleteMedicine.setOnClickListener(v -> { if (actionListener != null) actionListener.onDeleteMedicine(medicine); });
         }
     }
 }

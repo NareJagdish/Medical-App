@@ -109,17 +109,5 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnTakeDose"
-            style="@style/Widget.Material3.Button.TonalButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/log_dose"
-            android:textColor="@color/primary"
-            android:textStyle="bold"
-            app:cornerRadius="12dp"
-            app:backgroundTint="@color/surface" />
-
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

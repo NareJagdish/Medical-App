@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,7 +56,7 @@ public final class ActivityMainBinding implements ViewBinding {
   public final FloatingActionButton fabAddDoctor;
 
   @NonNull
-  public final View profileImageMock;
+  public final ImageView ivProfileImage;
 
   @NonNull
   public final RecyclerView rvDoctors;
@@ -80,7 +81,7 @@ public final class ActivityMainBinding implements ViewBinding {
       @NonNull ImageButton btnEditProfile, @NonNull MaterialButton btnSimulateAlerts,
       @NonNull TextView btnViewAllDoctors, @NonNull MaterialCardView cardAppointments,
       @NonNull MaterialCardView cardEmergency, @NonNull MaterialCardView cardProfile,
-      @NonNull FloatingActionButton fabAddDoctor, @NonNull View profileImageMock,
+      @NonNull FloatingActionButton fabAddDoctor, @NonNull ImageView ivProfileImage,
       @NonNull RecyclerView rvDoctors, @NonNull MaterialToolbar toolbar,
       @NonNull TextView tvUserAge, @NonNull TextView tvUserBloodGroup, @NonNull TextView tvUserId,
       @NonNull TextView tvUserName) {
@@ -94,7 +95,7 @@ public final class ActivityMainBinding implements ViewBinding {
     this.cardEmergency = cardEmergency;
     this.cardProfile = cardProfile;
     this.fabAddDoctor = fabAddDoctor;
-    this.profileImageMock = profileImageMock;
+    this.ivProfileImage = ivProfileImage;
     this.rvDoctors = rvDoctors;
     this.toolbar = toolbar;
     this.tvUserAge = tvUserAge;
@@ -184,9 +185,9 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.profileImageMock;
-      View profileImageMock = ViewBindings.findChildViewById(rootView, id);
-      if (profileImageMock == null) {
+      id = R.id.ivProfileImage;
+      ImageView ivProfileImage = ViewBindings.findChildViewById(rootView, id);
+      if (ivProfileImage == null) {
         break missingId;
       }
 
@@ -228,7 +229,7 @@ public final class ActivityMainBinding implements ViewBinding {
 
       return new ActivityMainBinding((ConstraintLayout) rootView, appBarLayout, bottomNavigation,
           btnEditProfile, btnSimulateAlerts, btnViewAllDoctors, cardAppointments, cardEmergency,
-          cardProfile, fabAddDoctor, profileImageMock, rvDoctors, toolbar, tvUserAge,
+          cardProfile, fabAddDoctor, ivProfileImage, rvDoctors, toolbar, tvUserAge,
           tvUserBloodGroup, tvUserId, tvUserName);
     }
     String missingId = rootView.getResources().getResourceName(id);

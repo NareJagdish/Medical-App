@@ -1,271 +1,210 @@
 package com.example.medreminderjava;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medreminderjava.data.DatabaseHelper;
+import com.example.medreminderjava.data.Doctor;
 import com.example.medreminderjava.data.Medicine;
-import com.example.medreminderjava.databinding.ActivityMedicineFormBinding;
 import com.example.medreminderjava.notification.AlarmReceiver;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class MedicineFormActivity extends AppCompatActivity {
 
-    private ActivityMedicineFormBinding binding;
     private DatabaseHelper dbHelper;
-    private long doctorId;
-    private long medicineId = -1; // -1 indicates ADD mode
+    private long medicineId = -1;
+    private long doctorId = -1;
     private boolean isEditMode = false;
-    private Medicine editMedicine;
 
-    private String breakfastTime = "08:00";
-    private String lunchTime = "13:30";
-    private String dinnerTime = "20:30";
+    private EditText etMedicineName, etTimesPerDay, etDosagePerTime, etTotalQuantity;
+    private RadioGroup rgTimingRelation;
+    private RadioButton rbBefore, rbAfter;
+    private CheckBox cbBreakfast, cbLunch, cbDinner;
+    private TextView tvBreakfastTime, tvLunchTime, tvDinnerTime;
+    private Spinner spinnerDoctors;
+
+    private List<Doctor> doctorList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMedicineFormBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_medicine_form);
 
         dbHelper = DatabaseHelper.getInstance(this);
-
-        doctorId = getIntent().getLongExtra("doctor_id", -1);
         medicineId = getIntent().getLongExtra("medicine_id", -1);
+        doctorId = getIntent().getLongExtra("doctor_id", -1);
         isEditMode = (medicineId != -1);
 
-        // Setup Toolbar
-        setSupportActionBar(binding.toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(isEditMode ? "Edit Medicine" : "Add Medicine");
-        }
-        binding.toolbar.setNavigationOnClickListener(v -> finish());
-
+        initUI();
         setupListeners();
+        loadDoctors();
 
         if (isEditMode) {
             loadMedicineData();
         }
+    }
 
-        // Button clicks
-        binding.btnCancel.setOnClickListener(v -> finish());
-        binding.btnSave.setOnClickListener(v -> saveMedicine());
+    private void initUI() {
+        etMedicineName = findViewById(R.id.etMedicineName);
+        etTimesPerDay = findViewById(R.id.etTimesPerDay);
+        etDosagePerTime = findViewById(R.id.etDosagePerTime);
+        etTotalQuantity = findViewById(R.id.etTotalQuantity);
+        rgTimingRelation = findViewById(R.id.rgTimingRelation);
+        rbBefore = findViewById(R.id.rbBefore);
+        rbAfter = findViewById(R.id.rbAfter);
+        cbBreakfast = findViewById(R.id.cbBreakfast);
+        cbLunch = findViewById(R.id.cbLunch);
+        cbDinner = findViewById(R.id.cbDinner);
+        tvBreakfastTime = findViewById(R.id.tvBreakfastTime);
+        tvLunchTime = findViewById(R.id.tvLunchTime);
+        tvDinnerTime = findViewById(R.id.tvDinnerTime);
+        spinnerDoctors = findViewById(R.id.spinnerDoctors);
+
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(isEditMode ? "Edit Medicine" : "Add Medicine");
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
 
     private void setupListeners() {
-        android.text.TextWatcher watcher = new android.text.TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                binding.tilMedicineName.setError(null);
-                binding.tilTimesPerDay.setError(null);
-                binding.tilDosagePerTime.setError(null);
-                binding.tilTotalQuantity.setError(null);
-            }
-            @Override public void afterTextChanged(android.text.Editable s) {}
-        };
-        binding.etMedicineName.addTextChangedListener(watcher);
-        binding.etTimesPerDay.addTextChangedListener(watcher);
-        binding.etDosagePerTime.addTextChangedListener(watcher);
-        binding.etTotalQuantity.addTextChangedListener(watcher);
+        tvBreakfastTime.setOnClickListener(v -> showTimePicker(tvBreakfastTime));
+        tvLunchTime.setOnClickListener(v -> showTimePicker(tvLunchTime));
+        tvDinnerTime.setOnClickListener(v -> showTimePicker(tvDinnerTime));
 
-        binding.cbBreakfast.setOnCheckedChangeListener((v, isChecked) -> 
-                binding.btnBreakfastTime.setVisibility(isChecked ? View.VISIBLE : View.GONE));
-        binding.cbLunch.setOnCheckedChangeListener((v, isChecked) -> 
-                binding.btnLunchTime.setVisibility(isChecked ? View.VISIBLE : View.GONE));
-        binding.cbDinner.setOnCheckedChangeListener((v, isChecked) -> 
-                binding.btnDinnerTime.setVisibility(isChecked ? View.VISIBLE : View.GONE));
-
-        binding.btnBreakfastTime.setOnClickListener(v -> showTimePicker("Breakfast"));
-        binding.btnLunchTime.setOnClickListener(v -> showTimePicker("Lunch"));
-        binding.btnDinnerTime.setOnClickListener(v -> showTimePicker("Dinner"));
+        findViewById(R.id.btnSave).setOnClickListener(v -> saveMedicine());
     }
 
-    private void showTimePicker(String mealType) {
-        String currentTime;
-        if (mealType.equals("Breakfast")) currentTime = breakfastTime;
-        else if (mealType.equals("Lunch")) currentTime = lunchTime;
-        else currentTime = dinnerTime;
+    private void loadDoctors() {
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String mobile = prefs.getString("logged_in_mobile", "");
+        doctorList = dbHelper.getAllDoctors(mobile);
 
-        String[] parts = currentTime.split(":");
-        int hour = Integer.parseInt(parts[0]);
-        int minute = Integer.parseInt(parts[1]);
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, (view, hourOfDay, minuteOfHour) -> {
-            String selectedTime = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minuteOfHour);
-            if (mealType.equals("Breakfast")) {
-                breakfastTime = selectedTime;
-                binding.btnBreakfastTime.setText(selectedTime);
-            } else if (mealType.equals("Lunch")) {
-                lunchTime = selectedTime;
-                binding.btnLunchTime.setText(selectedTime);
-            } else {
-                dinnerTime = selectedTime;
-                binding.btnDinnerTime.setText(selectedTime);
+        List<String> names = new ArrayList<>();
+        names.add("No Doctor (Self)");
+        int selectedIndex = 0;
+        for (int i = 0; i < doctorList.size(); i++) {
+            names.add(doctorList.get(i).getName());
+            if (doctorList.get(i).getId() == doctorId) {
+                selectedIndex = i + 1;
             }
-        }, hour, minute, true);
-        timePickerDialog.show();
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, names);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDoctors.setAdapter(adapter);
+        spinnerDoctors.setSelection(selectedIndex);
+    }
+
+    private void showTimePicker(TextView target) {
+        Calendar c = Calendar.getInstance();
+        new TimePickerDialog(this, (view, hour, min) -> {
+            String amPm = (hour < 12) ? "AM" : "PM";
+            int h12 = (hour == 0 || hour == 12) ? 12 : hour % 12;
+            String time = String.format(Locale.getDefault(), "%02d:%02d %s", h12, min, amPm);
+            target.setText(time);
+        }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), false).show();
     }
 
     private void loadMedicineData() {
-        editMedicine = dbHelper.getMedicineById(medicineId);
-        if (editMedicine == null) {
-            Toast.makeText(this, "Error: Medicine not found", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+        Medicine m = dbHelper.getMedicineById(medicineId);
+        if (m == null) return;
 
-        binding.etMedicineName.setText(editMedicine.getName());
-        binding.etTimesPerDay.setText(String.valueOf(editMedicine.getTimesPerDay()));
-        binding.etTotalQuantity.setText(String.valueOf(editMedicine.getTotalQuantity()));
-        binding.etDosagePerTime.setText(String.valueOf(editMedicine.getDosagePerTime()));
+        etMedicineName.setText(m.getName());
+        etTimesPerDay.setText(String.valueOf(m.getTimesPerDay()));
+        etDosagePerTime.setText(String.valueOf(m.getDosagePerTime()));
+        etTotalQuantity.setText(String.valueOf(m.getTotalQuantity()));
 
-        if ("Before".equalsIgnoreCase(editMedicine.getTimingRelation())) {
-            binding.rbBeforeMeal.setChecked(true);
-        } else {
-            binding.rbAfterMeal.setChecked(true);
-        }
+        if ("Before".equalsIgnoreCase(m.getTimingRelation())) rbBefore.setChecked(true);
+        else rbAfter.setChecked(true);
 
-        String meals = editMedicine.getTimingMeals();
+        String meals = m.getTimingMeals();
         if (meals != null) {
-            binding.cbBreakfast.setChecked(meals.contains("Breakfast"));
-            binding.cbLunch.setChecked(meals.contains("Lunch"));
-            binding.cbDinner.setChecked(meals.contains("Dinner"));
+            cbBreakfast.setChecked(meals.contains("Breakfast"));
+            cbLunch.setChecked(meals.contains("Lunch"));
+            cbDinner.setChecked(meals.contains("Dinner"));
         }
 
-        if (editMedicine.getBreakfastTime() != null) {
-            breakfastTime = editMedicine.getBreakfastTime();
-            binding.btnBreakfastTime.setText(breakfastTime);
-        }
-        if (editMedicine.getLunchTime() != null) {
-            lunchTime = editMedicine.getLunchTime();
-            binding.btnLunchTime.setText(lunchTime);
-        }
-        if (editMedicine.getDinnerTime() != null) {
-            dinnerTime = editMedicine.getDinnerTime();
-            binding.btnDinnerTime.setText(dinnerTime);
+        tvBreakfastTime.setText(m.getBreakfastTime());
+        tvLunchTime.setText(m.getLunchTime());
+        tvDinnerTime.setText(m.getDinnerTime());
+        
+        // Handle doctor selection
+        if (m.getDoctorId() > 0) {
+            for (int i = 0; i < doctorList.size(); i++) {
+                if (doctorList.get(i).getId() == m.getDoctorId()) {
+                    spinnerDoctors.setSelection(i + 1);
+                    break;
+                }
+            }
         }
     }
 
     private void saveMedicine() {
-        String name = Objects.requireNonNull(binding.etMedicineName.getText()).toString().trim();
-        String timesStr = Objects.requireNonNull(binding.etTimesPerDay.getText()).toString().trim();
-        String totalStr = Objects.requireNonNull(binding.etTotalQuantity.getText()).toString().trim();
-        String dosageStr = Objects.requireNonNull(binding.etDosagePerTime.getText()).toString().trim();
+        String name = etMedicineName.getText().toString().trim();
+        if (name.isEmpty()) { Toast.makeText(this, "Enter medicine name", Toast.LENGTH_SHORT).show(); return; }
 
-        boolean isValid = true;
-        if (name.isEmpty()) {
-            binding.tilMedicineName.setError("Name is required");
-            isValid = false;
+        int times = 1;
+        try { times = Integer.parseInt(etTimesPerDay.getText().toString()); } catch (Exception e) {}
+
+        int dosage = 1;
+        try { dosage = Integer.parseInt(etDosagePerTime.getText().toString()); } catch (Exception e) {}
+
+        int total = 30;
+        try { total = Integer.parseInt(etTotalQuantity.getText().toString()); } catch (Exception e) {}
+
+        String relation = rbBefore.isChecked() ? "Before" : "After";
+
+        StringBuilder mealsBuilder = new StringBuilder();
+        if (cbBreakfast.isChecked()) mealsBuilder.append("Breakfast,");
+        if (cbLunch.isChecked()) mealsBuilder.append("Lunch,");
+        if (cbDinner.isChecked()) mealsBuilder.append("Dinner");
+        String meals = mealsBuilder.toString();
+        if (meals.endsWith(",")) meals = meals.substring(0, meals.length() - 1);
+
+        if (meals.isEmpty()) { Toast.makeText(this, "Select at least one meal time", Toast.LENGTH_SHORT).show(); return; }
+
+        long selectedDocId = -1;
+        int docPos = spinnerDoctors.getSelectedItemPosition();
+        if (docPos > 0 && doctorList != null && (docPos - 1) < doctorList.size()) {
+            selectedDocId = doctorList.get(docPos - 1).getId();
         }
 
-        int timesPerDay = 0;
-        try {
-            timesPerDay = Integer.parseInt(timesStr);
-            if (timesPerDay <= 0) {
-                binding.tilTimesPerDay.setError("Must be > 0");
-                isValid = false;
-            }
-        } catch (NumberFormatException e) {
-            binding.tilTimesPerDay.setError("Invalid number");
-            isValid = false;
-        }
-
-        int totalQty = 0;
-        try {
-            totalQty = Integer.parseInt(totalStr);
-            if (totalQty <= 0) {
-                binding.tilTotalQuantity.setError("Must be > 0");
-                isValid = false;
-            }
-        } catch (NumberFormatException e) {
-            binding.tilTotalQuantity.setError("Invalid number");
-            isValid = false;
-        }
-
-        int dosagePerTime = 0;
-        try {
-            dosagePerTime = Integer.parseInt(dosageStr);
-            if (dosagePerTime <= 0) {
-                binding.tilDosagePerTime.setError("Must be > 0");
-                isValid = false;
-            }
-        } catch (NumberFormatException e) {
-            binding.tilDosagePerTime.setError("Invalid number");
-            isValid = false;
-        }
-
-        if (!isValid) return;
-
-        // Meal Selection Validation
-        List<String> selectedMeals = new ArrayList<>();
-        if (binding.cbBreakfast.isChecked()) selectedMeals.add("Breakfast");
-        if (binding.cbLunch.isChecked()) selectedMeals.add("Lunch");
-        if (binding.cbDinner.isChecked()) selectedMeals.add("Dinner");
-
-        if (selectedMeals.isEmpty()) {
-            Toast.makeText(this, "Please select at least one meal timing", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        // Format CSV meals string
-        StringBuilder mealsSb = new StringBuilder();
-        for (int i = 0; i < selectedMeals.size(); i++) {
-            mealsSb.append(selectedMeals.get(i));
-            if (i < selectedMeals.size() - 1) {
-                mealsSb.append(",");
-            }
-        }
-        String timingMeals = mealsSb.toString();
-        String timingRelation = binding.rbBeforeMeal.isChecked() ? "Before" : "After";
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String userMobile = prefs.getString("logged_in_mobile", "");
 
         if (isEditMode) {
-            // Cancel old alarms
-            AlarmReceiver.cancelAlarmsForMedicine(this, editMedicine);
-
-            int remainingQty = editMedicine.getRemainingQuantity();
-            if (totalQty != editMedicine.getTotalQuantity()) {
-                remainingQty = totalQty;
-            }
-
-            // Update DB
-            dbHelper.updateMedicine(medicineId, name, timesPerDay, timingRelation, 
-                    timingMeals, totalQty, dosagePerTime, remainingQty, 
-                    breakfastTime, lunchTime, dinnerTime);
-
-            // Schedule new alarms
-            Medicine updatedMedicine = dbHelper.getMedicineById(medicineId);
-            if (updatedMedicine != null) {
-                AlarmReceiver.scheduleDoseAlarms(this, updatedMedicine);
-            }
-
-            Toast.makeText(this, "Medicine updated", Toast.LENGTH_SHORT).show();
+            dbHelper.updateMedicine(medicineId, selectedDocId, name, times, relation, meals, total, dosage, total, "", "",
+                    tvBreakfastTime.getText().toString(), tvLunchTime.getText().toString(), tvDinnerTime.getText().toString());
         } else {
-            // Add mode
-            long newId = dbHelper.addMedicine(doctorId, name, timesPerDay, timingRelation, 
-                    timingMeals, totalQty, dosagePerTime, totalQty, 
-                    breakfastTime, lunchTime, dinnerTime);
-
-            // Schedule alarms for the new medicine
-            Medicine newMedicine = dbHelper.getMedicineById(newId);
-            if (newMedicine != null) {
-                AlarmReceiver.scheduleDoseAlarms(this, newMedicine);
-            }
-
-            Toast.makeText(this, "Medicine added", Toast.LENGTH_SHORT).show();
+            medicineId = dbHelper.addMedicine(userMobile, selectedDocId, name, times, relation, meals, total, dosage, total, "", "",
+                    tvBreakfastTime.getText().toString(), tvLunchTime.getText().toString(), tvDinnerTime.getText().toString());
         }
 
-        // Run stock warnings check immediately
-        AlarmReceiver.checkAllMedicinesAndNotify(this);
+        Medicine m = dbHelper.getMedicineById(medicineId);
+        if (m != null) {
+            AlarmReceiver.cancelAlarmsForMedicine(this, m);
+            AlarmReceiver.scheduleDoseAlarms(this, m);
+        }
 
+        Toast.makeText(this, "Medicine Saved", Toast.LENGTH_SHORT).show();
         finish();
     }
 }

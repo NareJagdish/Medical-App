@@ -13,6 +13,10 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
     <uses-feature
         android:name="android.hardware.telephony"
@@ -61,6 +65,20 @@
             android:name="com.example.medreminderjava.MedicineListActivity"
             android:exported="false"
             android:parentActivityName="com.example.medreminderjava.MainActivity" />
+        <activity
+            android:name="com.example.medreminderjava.ReportsActivity"
+            android:exported="false"
+            android:parentActivityName="com.example.medreminderjava.MainActivity" />
+        <activity
+            android:name="com.example.medreminderjava.AppointmentListActivity"
+            android:exported="false"
+            android:parentActivityName="com.example.medreminderjava.ReportsActivity" />
+        <activity
+            android:name="com.example.medreminderjava.ReminderAlarmActivity"
+            android:exported="false"
+            android:showForAllUsers="true"
+            android:showOnLockScreen="true"
+            android:turnScreenOn="true" />
 
         <!-- BroadcastReceiver for scheduling medicine alarms and daily stock alerts -->
         <receiver

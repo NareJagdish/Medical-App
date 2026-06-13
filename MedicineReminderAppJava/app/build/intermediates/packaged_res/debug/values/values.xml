@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="dose_units">
+        <item>Tabl</item>
+        <item>Caps</item>
+        <item>ml</item>
+        <item>mg</item>
+    </string-array>
+    <string-array name="pill_types">
+        <item>Tablet</item>
+        <item>Capsule</item>
+        <item>Syrup</item>
+        <item>Injection</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="priority_levels">
+        <item>Normal</item>
+        <item>Urgent</item>
+        <item>Follow-up</item>
+        <item>Routine Checkup</item>
+    </string-array>
     <color name="accent">#26A69A</color>
     <color name="background">#FFFFFF</color>
     <color name="black">#FF000000</color>
@@ -26,9 +45,9 @@
     <string name="book_appointment">Book Appointment</string>
     <string name="breakfast">Breakfast</string>
     <string name="cancel">Cancel</string>
-    <string name="default_breakfast_time">08:00</string>
-    <string name="default_dinner_time">20:30</string>
-    <string name="default_lunch_time">13:30</string>
+    <string name="default_breakfast_time">08:00 AM</string>
+    <string name="default_dinner_time">08:30 PM</string>
+    <string name="default_lunch_time">01:30 PM</string>
     <string name="delete_medicine">Delete Medicine</string>
     <string name="dinner">Dinner</string>
     <string name="doctors_appointments">Doctor Appointments &amp; Medicines</string>

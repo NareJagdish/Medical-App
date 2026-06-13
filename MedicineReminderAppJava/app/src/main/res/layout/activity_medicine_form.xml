@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context=".MedicineFormActivity">
+    android:background="@color/white">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background"
-        app:elevation="0dp"
-        app:layout_constraintTop_toTopOf="parent">
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:title="Add Medicine"
-            app:titleTextColor="@color/primary"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:navigationIconTint="@color/primary" />
-    </com.google.android.material.appbar.AppBarLayout>
+        android:layout_height="?attr/actionBarSize"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title="Add Medicine"
+        app:titleTextColor="@color/primary"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-        app:layout_constraintBottom_toTopOf="@id/layoutActions">
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,233 +28,217 @@
             android:orientation="vertical"
             android:padding="24dp">
 
+            <!-- Medicine Name -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilMedicineName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                app:boxCornerRadiusTopStart="12dp" app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp" app:boxCornerRadiusBottomEnd="12dp">
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Medicine Name">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etMedicineName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Medicine Name"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/text_primary" />
+                    android:inputType="textCapWords" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Times Daily & Dosage Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:baselineAligned="false">
+                android:layout_marginTop="16dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilTimesPerDay"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="16dp"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                    app:boxCornerRadiusTopStart="12dp" app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp" app:boxCornerRadiusBottomEnd="12dp">
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:hint="Times Daily">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etTimesPerDay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Times Daily"
                         android:inputType="number"
-                        android:text="1"
-                        android:textColor="@color/text_primary" />
+                        android:text="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilDosagePerTime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
-                    android:layout_marginBottom="16dp"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                    app:boxCornerRadiusTopStart="12dp" app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp" app:boxCornerRadiusBottomEnd="12dp">
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:hint="Dosage">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etDosagePerTime"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Dosage"
                         android:inputType="number"
-                        android:text="1"
-                        android:textColor="@color/text_primary" />
+                        android:text="1" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
+            <!-- Total Stock -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilTotalQuantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                app:boxCornerRadiusTopStart="12dp" app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp" app:boxCornerRadiusBottomEnd="12dp">
+                android:layout_marginTop="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Total Stock Quantity">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etTotalQuantity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Total Stock Quantity"
                     android:inputType="number"
-                    android:text="30"
-                    android:textColor="@color/text_primary" />
+                    android:text="30" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Doctor Selection -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Prescribed by (Doctor)"
+                android:textColor="@color/primary"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinnerDoctors"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/shape_rect_outline"
+                android:paddingHorizontal="12dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
                 android:text="Timing Relationship"
                 android:textColor="@color/primary"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <RadioGroup
-                android:id="@+id/rgMealRelation"
+                android:id="@+id/rgTimingRelation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="24dp">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
                 <RadioButton
-                    android:id="@+id/rbBeforeMeal"
+                    android:id="@+id/rbBefore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Before Meal"
-                    android:checked="true"
-                    android:textColor="@color/text_primary"
-                    android:buttonTint="@color/primary"/>
+                    android:checked="true" />
                 <RadioButton
-                    android:id="@+id/rbAfterMeal"
+                    android:id="@+id/rbAfter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="After Meal"
-                    android:layout_marginStart="32dp"
-                    android:textColor="@color/text_primary"
-                    android:buttonTint="@color/primary"/>
+                    android:layout_marginStart="24dp"
+                    android:text="After Meal" />
             </RadioGroup>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/select_meal_custom_times"
+                android:layout_marginTop="28dp"
+                android:text="Select Meal &amp; Custom Times"
                 android:textColor="@color/primary"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <!-- Breakfast Row -->
+            <!-- Meal Rows -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
+                android:orientation="horizontal">
                 <CheckBox
                     android:id="@+id/cbBreakfast"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/breakfast"
-                    android:checked="true"
-                    android:textColor="@color/text_primary"
-                    android:buttonTint="@color/primary"/>
-                <Button
-                    android:id="@+id/btnBreakfastTime"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:text="Breakfast"
+                    android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tvBreakfastTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/default_breakfast_time"
-                    android:textSize="12sp"
-                    android:visibility="visible"/>
+                    android:background="@drawable/shape_round_rect_cyan_border"
+                    android:backgroundTint="#F0F0F0"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="10dp"
+                    android:text="08:00 AM"
+                    android:textColor="#555555" />
             </LinearLayout>
 
-            <!-- Lunch Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
+                android:orientation="horizontal">
                 <CheckBox
                     android:id="@+id/cbLunch"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/lunch"
-                    android:textColor="@color/text_primary"
-                    android:buttonTint="@color/primary"/>
-                <Button
-                    android:id="@+id/btnLunchTime"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:text="Lunch"
+                    android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tvLunchTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/default_lunch_time"
-                    android:textSize="12sp"
-                    android:visibility="gone"/>
+                    android:background="@drawable/shape_round_rect_cyan_border"
+                    android:backgroundTint="#F0F0F0"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="10dp"
+                    android:text="01:30 PM"
+                    android:textColor="#555555" />
             </LinearLayout>
 
-            <!-- Dinner Row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
+                android:orientation="horizontal">
                 <CheckBox
                     android:id="@+id/cbDinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/dinner"
-                    android:textColor="@color/text_primary"
-                    android:buttonTint="@color/primary"/>
-                <Button
-                    android:id="@+id/btnDinnerTime"
-                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:text="Dinner"
+                    android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tvDinnerTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/default_dinner_time"
-                    android:textSize="12sp"
-                    android:visibility="gone"/>
+                    android:background="@drawable/shape_round_rect_cyan_border"
+                    android:backgroundTint="#F0F0F0"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="10dp"
+                    android:text="08:30 PM"
+                    android:textColor="#555555" />
             </LinearLayout>
+
+            <!-- Save Button -->
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="16dp"
+                android:text="Save"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="30dp"
+                android:backgroundTint="@color/primary" />
 
         </LinearLayout>
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/layoutActions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCancel"
-            style="@style/Widget.Material3.Button.TextButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:text="@string/cancel"
-            android:textColor="@color/text_secondary"
-            android:layout_marginEnd="10dp" />
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSave"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:text="@string/save"
-            android:textStyle="bold"
-            app:cornerRadius="16dp"
-            android:layout_marginStart="10dp" />
-    </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

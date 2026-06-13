@@ -4,32 +4,44 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medreminderjava.data.DatabaseHelper;
-import com.example.medreminderjava.databinding.ActivityRegisterBinding;
-
-import java.util.Objects;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private ActivityRegisterBinding binding;
     private DatabaseHelper dbHelper;
+    private EditText etName, etLocation, etAge, etBloodGroup, etMobile, etPassword, etAltMobile;
+    private TextInputLayout tilName, tilMobile, tilPassword, tilAltMobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityRegisterBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_register);
 
         dbHelper = DatabaseHelper.getInstance(this);
 
+        etName = findViewById(R.id.etName);
+        etLocation = findViewById(R.id.etLocation);
+        etAge = findViewById(R.id.etAge);
+        etBloodGroup = findViewById(R.id.etBloodGroup);
+        etMobile = findViewById(R.id.etMobile);
+        etPassword = findViewById(R.id.etPassword);
+        etAltMobile = findViewById(R.id.etAltMobile);
+
+        tilName = findViewById(R.id.tilName);
+        tilMobile = findViewById(R.id.tilMobile);
+        tilPassword = findViewById(R.id.tilPassword);
+        tilAltMobile = findViewById(R.id.tilAltMobile);
+
         setupTextWatchers();
 
-        binding.btnRegister.setOnClickListener(v -> registerUser());
-        binding.tvLoginLink.setOnClickListener(v -> {
+        findViewById(R.id.btnRegister).setOnClickListener(v -> registerUser());
+        findViewById(R.id.tvLoginLink).setOnClickListener(v -> {
             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
             finish();
         });
@@ -43,53 +55,53 @@ public class RegisterActivity extends AppCompatActivity {
             }
             @Override public void afterTextChanged(Editable s) {}
         };
-        binding.etName.addTextChangedListener(watcher);
-        binding.etMobile.addTextChangedListener(watcher);
-        binding.etPassword.addTextChangedListener(watcher);
-        binding.etAltMobile.addTextChangedListener(watcher);
+        etName.addTextChangedListener(watcher);
+        etMobile.addTextChangedListener(watcher);
+        etPassword.addTextChangedListener(watcher);
+        etAltMobile.addTextChangedListener(watcher);
     }
 
     private void clearErrors() {
-        binding.tilName.setError(null);
-        binding.tilMobile.setError(null);
-        binding.tilPassword.setError(null);
-        binding.tilAltMobile.setError(null);
+        tilName.setError(null);
+        tilMobile.setError(null);
+        tilPassword.setError(null);
+        tilAltMobile.setError(null);
     }
 
     private void registerUser() {
-        String name = Objects.requireNonNull(binding.etName.getText()).toString().trim();
-        String location = Objects.requireNonNull(binding.etLocation.getText()).toString().trim();
-        String age = Objects.requireNonNull(binding.etAge.getText()).toString().trim();
-        String bloodGroup = Objects.requireNonNull(binding.etBloodGroup.getText()).toString().trim();
-        String mobile = Objects.requireNonNull(binding.etMobile.getText()).toString().trim();
-        String password = Objects.requireNonNull(binding.etPassword.getText()).toString().trim();
-        String altMobile = Objects.requireNonNull(binding.etAltMobile.getText()).toString().trim();
+        String name = etName.getText().toString().trim();
+        String location = etLocation.getText().toString().trim();
+        String age = etAge.getText().toString().trim();
+        String bloodGroup = etBloodGroup.getText().toString().trim();
+        String mobile = etMobile.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+        String altMobile = etAltMobile.getText().toString().trim();
 
         boolean isValid = true;
 
         if (name.isEmpty()) {
-            binding.tilName.setError("Name is required");
+            tilName.setError("Name is required");
             isValid = false;
         } else if (name.matches(".*\\d.*")) {
-            binding.tilName.setError("Name should not contain digits");
+            tilName.setError("Name should not contain digits");
             isValid = false;
         }
 
         if (mobile.isEmpty()) {
-            binding.tilMobile.setError("Mobile number is required");
+            tilMobile.setError("Mobile number is required");
             isValid = false;
         } else if (mobile.length() != 10) {
-            binding.tilMobile.setError("Mobile number must be 10 digits");
+            tilMobile.setError("Mobile number must be 10 digits");
             isValid = false;
         }
 
         if (password.isEmpty()) {
-            binding.tilPassword.setError("Password is required");
+            tilPassword.setError("Password is required");
             isValid = false;
         }
 
         if (!altMobile.isEmpty() && altMobile.length() != 10) {
-            binding.tilAltMobile.setError("Alternate mobile must be 10 digits");
+            tilAltMobile.setError("Alternate mobile must be 10 digits");
             isValid = false;
         }
 

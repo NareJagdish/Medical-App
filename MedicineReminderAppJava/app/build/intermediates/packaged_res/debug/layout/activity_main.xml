@@ -52,11 +52,14 @@
                     android:layout_height="wrap_content"
                     android:padding="20dp">
 
-                    <View
-                        android:id="@+id/profileImageMock"
+                    <ImageView
+                        android:id="@+id/ivProfileImage"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
+                        android:src="@android:drawable/ic_menu_gallery"
                         android:background="@drawable/shape_circle_accent"
+                        android:padding="12dp"
+                        android:scaleType="centerInside"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -70,8 +73,8 @@
                         android:textSize="22sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@id/btnEditProfile"
-                        app:layout_constraintStart_toEndOf="@id/profileImageMock"
-                        app:layout_constraintTop_toTopOf="@id/profileImageMock" />
+                        app:layout_constraintStart_toEndOf="@id/ivProfileImage"
+                        app:layout_constraintTop_toTopOf="@id/ivProfileImage" />
 
                     <TextView
                         android:id="@+id/tvUserId"
@@ -98,7 +101,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@id/profileImageMock">
+                        app:layout_constraintTop_toBottomOf="@id/ivProfileImage">
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -155,18 +158,18 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <GridLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="140dp"
                 android:layout_marginTop="16dp"
-                android:columnCount="2"
-                android:alignmentMode="alignMargins">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardEmergency"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:layout_margin="8dp"
                     app:cardCornerRadius="16dp"
                     app:cardBackgroundColor="@color/surface"
@@ -175,13 +178,13 @@
                     app:strokeColor="@color/divider">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="20dp">
+                        android:padding="16dp">
                         <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:src="@android:drawable/ic_menu_call"
                             app:tint="@color/error" />
                         <TextView
@@ -197,8 +200,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardAppointments"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:layout_margin="8dp"
                     app:cardCornerRadius="16dp"
                     app:cardBackgroundColor="@color/surface"
@@ -207,13 +210,13 @@
                     app:strokeColor="@color/divider">
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="20dp">
+                        android:padding="16dp">
                         <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:src="@android:drawable/ic_menu_my_calendar"
                             app:tint="@color/primary" />
                         <TextView
@@ -221,11 +224,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:text="@string/book_appointment"
+                            android:textAlignment="center"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
-            </GridLayout>
+            </LinearLayout>
 
             <!-- Specialist List Section -->
             <RelativeLayout

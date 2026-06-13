@@ -51,7 +51,29 @@
     <string name="lunch">Lunch</string>
     <string name="dinner">Dinner</string>
     <string name="select_meal_custom_times">Select Meal &amp; Custom Times</string>
-    <string name="default_breakfast_time">08:00</string>
-    <string name="default_lunch_time">13:30</string>
-    <string name="default_dinner_time">20:30</string>
+    <string name="default_breakfast_time">08:00 AM</string>
+    <string name="default_lunch_time">01:30 PM</string>
+    <string name="default_dinner_time">08:30 PM</string>
+
+    <string-array name="priority_levels">
+        <item>Normal</item>
+        <item>Urgent</item>
+        <item>Follow-up</item>
+        <item>Routine Checkup</item>
+    </string-array>
+
+    <string-array name="pill_types">
+        <item>Tablet</item>
+        <item>Capsule</item>
+        <item>Syrup</item>
+        <item>Injection</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="dose_units">
+        <item>Tabl</item>
+        <item>Caps</item>
+        <item>ml</item>
+        <item>mg</item>
+    </string-array>
 </resources>

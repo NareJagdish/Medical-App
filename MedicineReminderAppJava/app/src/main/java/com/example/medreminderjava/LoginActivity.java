@@ -6,20 +6,22 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medreminderjava.data.DatabaseHelper;
-import com.example.medreminderjava.databinding.ActivityLoginBinding;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private ActivityLoginBinding binding;
     private DatabaseHelper dbHelper;
     private SharedPreferences sharedPrefs;
+    private EditText etMobile, etPassword;
+    private TextInputLayout tilMobile, tilPassword;
 
     private static final String PREFS_NAME = "UserPrefs";
     private static final String KEY_IS_LOGGED_IN = "is_logged_in";
@@ -35,51 +37,54 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_login);
 
         dbHelper = DatabaseHelper.getInstance(this);
 
+        etMobile = findViewById(R.id.etMobile);
+        etPassword = findViewById(R.id.etPassword);
+        tilMobile = findViewById(R.id.tilMobile);
+        tilPassword = findViewById(R.id.tilPassword);
+
         setupTextWatchers();
 
-        binding.btnLogin.setOnClickListener(v -> loginUser());
-        binding.tvRegisterLink.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
+        findViewById(R.id.btnLogin).setOnClickListener(v -> loginUser());
+        findViewById(R.id.tvRegisterLink).setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
     }
 
     private void setupTextWatchers() {
         TextWatcher watcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                binding.tilMobile.setError(null);
-                binding.tilPassword.setError(null);
+                tilMobile.setError(null);
+                tilPassword.setError(null);
             }
             @Override public void afterTextChanged(Editable s) {}
         };
-        binding.etMobile.addTextChangedListener(watcher);
-        binding.etPassword.addTextChangedListener(watcher);
+        etMobile.addTextChangedListener(watcher);
+        etPassword.addTextChangedListener(watcher);
     }
 
     private void loginUser() {
-        String mobile = Objects.requireNonNull(binding.etMobile.getText()).toString().trim();
-        String password = Objects.requireNonNull(binding.etPassword.getText()).toString().trim();
+        String mobile = etMobile.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
 
         boolean isValid = true;
         if (mobile.isEmpty()) {
-            binding.tilMobile.setError("Mobile number required");
+            tilMobile.setError("Mobile number required");
             isValid = false;
         } else if (mobile.length() != 10) {
-            binding.tilMobile.setError("Enter valid 10-digit number");
+            tilMobile.setError("Enter valid 10-digit number");
             isValid = false;
         }
 
         if (password.isEmpty()) {
-            binding.tilPassword.setError("Password required");
+            tilPassword.setError("Password required");
             isValid = false;
         }
 
         if (!isValid) return;
 
-        android.util.Log.d("LoginActivity", "Attempting login for: [" + mobile + "] with password: [" + password + "]");
         if (dbHelper.checkUser(mobile, password)) {
             sharedPrefs.edit()
                     .putBoolean(KEY_IS_LOGGED_IN, true)
@@ -89,8 +94,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
             startMainActivity();
         } else {
-            binding.tilMobile.setError("Invalid credentials");
-            binding.tilPassword.setError("Invalid credentials");
+            tilMobile.setError("Invalid credentials");
+            tilPassword.setError("Invalid credentials");
             Toast.makeText(this, "Invalid Mobile or Password", Toast.LENGTH_SHORT).show();
         }
     }

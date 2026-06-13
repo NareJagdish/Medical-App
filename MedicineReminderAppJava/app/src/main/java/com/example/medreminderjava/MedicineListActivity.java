@@ -1,17 +1,20 @@
 package com.example.medreminderjava;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medreminderjava.data.DatabaseHelper;
 import com.example.medreminderjava.data.Medicine;
-import com.example.medreminderjava.databinding.ActivityMedicineListBinding;
 import com.example.medreminderjava.notification.AlarmReceiver;
 import com.example.medreminderjava.ui.MedicineAdapter;
 
@@ -19,24 +22,28 @@ import java.util.List;
 
 public class MedicineListActivity extends AppCompatActivity implements MedicineAdapter.OnMedicineActionListener {
 
-    private ActivityMedicineListBinding binding;
     private DatabaseHelper dbHelper;
+    private RecyclerView rvAllMedicines;
+    private TextView tvNoMedicines;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMedicineListBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_medicine_list);
 
         dbHelper = DatabaseHelper.getInstance(this);
 
-        setSupportActionBar(binding.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        binding.toolbar.setNavigationOnClickListener(v -> finish());
+        toolbar.setNavigationOnClickListener(v -> finish());
 
-        binding.rvAllMedicines.setLayoutManager(new LinearLayoutManager(this));
+        rvAllMedicines = findViewById(R.id.rvAllMedicines);
+        tvNoMedicines = findViewById(R.id.tvNoMedicines);
+
+        rvAllMedicines.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -46,15 +53,17 @@ public class MedicineListActivity extends AppCompatActivity implements MedicineA
     }
 
     private void loadMedicines() {
-        List<Medicine> medicines = dbHelper.getAllMedicines();
+        SharedPreferences sharedPrefs = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String loggedInMobile = sharedPrefs.getString("logged_in_mobile", "");
+        List<Medicine> medicines = dbHelper.getAllMedicines(loggedInMobile);
         if (medicines.isEmpty()) {
-            binding.tvNoMedicines.setVisibility(View.VISIBLE);
-            binding.rvAllMedicines.setVisibility(View.GONE);
+            tvNoMedicines.setVisibility(View.VISIBLE);
+            rvAllMedicines.setVisibility(View.GONE);
         } else {
-            binding.tvNoMedicines.setVisibility(View.GONE);
-            binding.rvAllMedicines.setVisibility(View.VISIBLE);
+            tvNoMedicines.setVisibility(View.GONE);
+            rvAllMedicines.setVisibility(View.VISIBLE);
             MedicineAdapter adapter = new MedicineAdapter(medicines, this);
-            binding.rvAllMedicines.setAdapter(adapter);
+            rvAllMedicines.setAdapter(adapter);
         }
     }
 
@@ -77,7 +86,6 @@ public class MedicineListActivity extends AppCompatActivity implements MedicineA
                     loadMedicines();
                     Toast.makeText(this, "Medicine deleted", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Cancel", null)
                 .show();
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "med_reminder.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 10;
 
     private static DatabaseHelper instance;
     private final Context mContext;
@@ -34,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         android.util.Log.d("DatabaseHelper", "onCreate: Creating tables");
         String CREATE_DOCTORS_TABLE = "CREATE TABLE " + DbContract.DoctorEntry.TABLE_NAME + " ("
                 + DbContract.DoctorEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DbContract.DoctorEntry.COLUMN_USER_MOBILE + " TEXT NOT NULL, "
                 + DbContract.DoctorEntry.COLUMN_NAME + " TEXT NOT NULL, "
                 + DbContract.DoctorEntry.COLUMN_LOCATION + " TEXT, "
                 + DbContract.DoctorEntry.COLUMN_CONTACT + " TEXT, "
@@ -42,7 +43,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String CREATE_MEDICINES_TABLE = "CREATE TABLE " + DbContract.MedicineEntry.TABLE_NAME + " ("
                 + DbContract.MedicineEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + DbContract.MedicineEntry.COLUMN_DOCTOR_ID + " INTEGER NOT NULL, "
+                + DbContract.MedicineEntry.COLUMN_USER_MOBILE + " TEXT, "
+                + DbContract.MedicineEntry.COLUMN_DOCTOR_ID + " INTEGER, "
                 + DbContract.MedicineEntry.COLUMN_NAME + " TEXT NOT NULL, "
                 + DbContract.MedicineEntry.COLUMN_TIMES_PER_DAY + " INTEGER DEFAULT 1, "
                 + DbContract.MedicineEntry.COLUMN_TIMING_RELATION + " TEXT, "
@@ -50,12 +52,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + DbContract.MedicineEntry.COLUMN_TOTAL_QUANTITY + " INTEGER, "
                 + DbContract.MedicineEntry.COLUMN_DOSAGE_PER_TIME + " INTEGER DEFAULT 1, "
                 + DbContract.MedicineEntry.COLUMN_REMAINING_QUANTITY + " INTEGER, "
-                + DbContract.MedicineEntry.COLUMN_START_DATE + " INTEGER, "
+                + DbContract.MedicineEntry.COLUMN_START_DATE + " TEXT, "
+                + DbContract.MedicineEntry.COLUMN_END_DATE + " TEXT, "
                 + DbContract.MedicineEntry.COLUMN_BREAKFAST_TIME + " TEXT, "
                 + DbContract.MedicineEntry.COLUMN_LUNCH_TIME + " TEXT, "
-                + DbContract.MedicineEntry.COLUMN_DINNER_TIME + " TEXT, "
-                + "FOREIGN KEY(" + DbContract.MedicineEntry.COLUMN_DOCTOR_ID + ") REFERENCES "
-                + DbContract.DoctorEntry.TABLE_NAME + "(" + DbContract.DoctorEntry._ID + ") ON DELETE CASCADE"
+                + DbContract.MedicineEntry.COLUMN_DINNER_TIME + " TEXT"
                 + ");";
 
         String CREATE_USERS_TABLE = "CREATE TABLE " + DbContract.UserEntry.TABLE_NAME + " ("
@@ -69,28 +70,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + DbContract.UserEntry.COLUMN_ALT_MOBILE + " TEXT"
                 + ");";
 
+        String CREATE_LOGS_TABLE = "CREATE TABLE " + DbContract.MedicineLogEntry.TABLE_NAME + " ("
+                + DbContract.MedicineLogEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DbContract.MedicineLogEntry.COLUMN_MEDICINE_ID + " INTEGER, "
+                + DbContract.MedicineLogEntry.COLUMN_DATE + " TEXT, "
+                + DbContract.MedicineLogEntry.COLUMN_STATUS + " TEXT"
+                + ");";
+
+        String CREATE_APPOINTMENTS_TABLE = "CREATE TABLE " + DbContract.AppointmentEntry.TABLE_NAME + " ("
+                + DbContract.AppointmentEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DbContract.AppointmentEntry.COLUMN_USER_MOBILE + " TEXT, "
+                + DbContract.AppointmentEntry.COLUMN_DOCTOR_ID + " INTEGER, "
+                + DbContract.AppointmentEntry.COLUMN_DATE + " TEXT, "
+                + DbContract.AppointmentEntry.COLUMN_TIME + " TEXT, "
+                + DbContract.AppointmentEntry.COLUMN_REASON + " TEXT, "
+                + DbContract.AppointmentEntry.COLUMN_PRIORITY + " TEXT"
+                + ");";
+
         db.execSQL(CREATE_DOCTORS_TABLE);
         db.execSQL(CREATE_MEDICINES_TABLE);
         db.execSQL(CREATE_USERS_TABLE);
-/*
-        // Prepopulate with mock doctors with hospital details
-        db.execSQL("INSERT INTO " + DbContract.DoctorEntry.TABLE_NAME + " (name, location, contact, email) VALUES " +
-                "('Dr. Deshmukh', 'City Hospital, Mumbai', '022-24567890', 'deshmukh@hospital.com')");
-        db.execSQL("INSERT INTO " + DbContract.DoctorEntry.TABLE_NAME + " (name, location, contact, email) VALUES " +
-                "('Dr. Pawar', 'LifeCare Clinic, Pune', '020-25671234', 'pawar@clinic.in')");
-
- */
+        db.execSQL(CREATE_LOGS_TABLE);
+        db.execSQL(CREATE_APPOINTMENTS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        android.util.Log.d("DatabaseHelper", "onUpgrade: from " + oldVersion + " to " + newVersion);
-        // Force logout to prevent session mismatch if data is wiped
         mContext.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE).edit().clear().apply();
-
         db.execSQL("DROP TABLE IF EXISTS " + DbContract.UserEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DbContract.MedicineEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DbContract.DoctorEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DbContract.MedicineLogEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS prescriptions");
+        db.execSQL("DROP TABLE IF EXISTS " + DbContract.AppointmentEntry.TABLE_NAME);
         onCreate(db);
     }
 
@@ -102,9 +114,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // --- DOCTOR CRUD ---
 
-    public long addDoctor(String name, String location, String contact, String email) {
+    public long addDoctor(String userMobile, String name, String location, String contact, String email) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(DbContract.DoctorEntry.COLUMN_USER_MOBILE, userMobile);
         values.put(DbContract.DoctorEntry.COLUMN_NAME, name);
         values.put(DbContract.DoctorEntry.COLUMN_LOCATION, location);
         values.put(DbContract.DoctorEntry.COLUMN_CONTACT, contact);
@@ -112,22 +125,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.insert(DbContract.DoctorEntry.TABLE_NAME, null, values);
     }
 
-    public int updateDoctor(long id, String name, String location, String contact, String email) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DbContract.DoctorEntry.COLUMN_NAME, name);
-        values.put(DbContract.DoctorEntry.COLUMN_LOCATION, location);
-        values.put(DbContract.DoctorEntry.COLUMN_CONTACT, contact);
-        values.put(DbContract.DoctorEntry.COLUMN_EMAIL, email);
-        return db.update(DbContract.DoctorEntry.TABLE_NAME, values,
-                DbContract.DoctorEntry._ID + "=?", new String[]{String.valueOf(id)});
-    }
-
-    public List<Doctor> getAllDoctors() {
+    public List<Doctor> getAllDoctors(String userMobile) {
         List<Doctor> doctors = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + DbContract.DoctorEntry.TABLE_NAME + " ORDER BY " + DbContract.DoctorEntry._ID + " ASC";
-        Cursor cursor = db.rawQuery(query, null);
+        String selection = DbContract.DoctorEntry.COLUMN_USER_MOBILE + " = ?";
+        String[] selectionArgs = {userMobile};
+        Cursor cursor = db.query(DbContract.DoctorEntry.TABLE_NAME, null, selection, selectionArgs, null, null, DbContract.DoctorEntry._ID + " ASC");
 
         if (cursor.moveToFirst()) {
             do {
@@ -145,17 +148,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public Doctor getDoctorById(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(DbContract.DoctorEntry.TABLE_NAME,
-                null, DbContract.DoctorEntry._ID + "=?", new String[]{String.valueOf(id)},
-                null, null, null);
-        
+        Cursor cursor = db.query(DbContract.DoctorEntry.TABLE_NAME, null, DbContract.DoctorEntry._ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
         Doctor doctor = null;
         if (cursor != null && cursor.moveToFirst()) {
-            String name = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.DoctorEntry.COLUMN_NAME));
-            String location = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.DoctorEntry.COLUMN_LOCATION));
-            String contact = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.DoctorEntry.COLUMN_CONTACT));
-            String email = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.DoctorEntry.COLUMN_EMAIL));
-            doctor = new Doctor(id, name, location, contact, email);
+            doctor = new Doctor(id, cursor.getString(cursor.getColumnIndexOrThrow(DbContract.DoctorEntry.COLUMN_NAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DbContract.DoctorEntry.COLUMN_LOCATION)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DbContract.DoctorEntry.COLUMN_CONTACT)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DbContract.DoctorEntry.COLUMN_EMAIL)));
             cursor.close();
         }
         return doctor;
@@ -166,224 +165,234 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(DbContract.DoctorEntry.TABLE_NAME, DbContract.DoctorEntry._ID + "=?", new String[]{String.valueOf(id)});
     }
 
-    // User Operations
+    // --- USER CRUD ---
+
     public long registerUser(String name, String location, String age, String bloodGroup, String mobile, String password, String altMobile) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DbContract.UserEntry.COLUMN_NAME, name);
-        values.put(DbContract.UserEntry.COLUMN_LOCATION, location);
-        values.put(DbContract.UserEntry.COLUMN_AGE, age);
-        values.put(DbContract.UserEntry.COLUMN_BLOOD_GROUP, bloodGroup);
-        values.put(DbContract.UserEntry.COLUMN_MOBILE, mobile);
-        values.put(DbContract.UserEntry.COLUMN_PASSWORD, password);
-        values.put(DbContract.UserEntry.COLUMN_ALT_MOBILE, altMobile);
-
-        android.util.Log.d("DatabaseHelper", "Registering user: " + mobile);
-        long result = db.insert(DbContract.UserEntry.TABLE_NAME, null, values);
-        android.util.Log.d("DatabaseHelper", "Registration result row ID: " + result);
-        
-        Cursor countCursor = db.rawQuery("SELECT count(*) FROM " + DbContract.UserEntry.TABLE_NAME, null);
-        if (countCursor.moveToFirst()) {
-            android.util.Log.d("DatabaseHelper", "Total users in DB: " + countCursor.getInt(0));
-        }
-        countCursor.close();
-
-        return result;
+        ContentValues v = new ContentValues();
+        v.put(DbContract.UserEntry.COLUMN_NAME, name);
+        v.put(DbContract.UserEntry.COLUMN_LOCATION, location);
+        v.put(DbContract.UserEntry.COLUMN_AGE, age);
+        v.put(DbContract.UserEntry.COLUMN_BLOOD_GROUP, bloodGroup);
+        v.put(DbContract.UserEntry.COLUMN_MOBILE, mobile);
+        v.put(DbContract.UserEntry.COLUMN_PASSWORD, password);
+        v.put(DbContract.UserEntry.COLUMN_ALT_MOBILE, altMobile);
+        return db.insert(DbContract.UserEntry.TABLE_NAME, null, v);
     }
 
     public boolean checkUser(String mobile, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String selection = DbContract.UserEntry.COLUMN_MOBILE + " = ? AND " + DbContract.UserEntry.COLUMN_PASSWORD + " = ?";
-        String[] selectionArgs = {mobile, password};
-        android.util.Log.d("DatabaseHelper", "Checking user: " + mobile + " / " + password);
-        Cursor cursor = db.query(DbContract.UserEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
-        int count = (cursor != null) ? cursor.getCount() : 0;
-        android.util.Log.d("DatabaseHelper", "User found count: " + count);
-        if (cursor != null) cursor.close();
-        return count > 0;
+        Cursor c = db.query(DbContract.UserEntry.TABLE_NAME, null, DbContract.UserEntry.COLUMN_MOBILE + "=? AND " + DbContract.UserEntry.COLUMN_PASSWORD + "=?", new String[]{mobile, password}, null, null, null);
+        boolean exists = (c != null && c.getCount() > 0);
+        if (c != null) c.close();
+        return exists;
     }
 
     public Cursor getUserByMobile(String mobile) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String selection = DbContract.UserEntry.COLUMN_MOBILE + " = ?";
-        String[] selectionArgs = {mobile};
-        return db.query(DbContract.UserEntry.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        return getReadableDatabase().query(DbContract.UserEntry.TABLE_NAME, null, DbContract.UserEntry.COLUMN_MOBILE + "=?", new String[]{mobile}, null, null, null);
     }
 
-    public int updateUser(String name, String location, String age, String bloodGroup, String mobile, String altMobile) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DbContract.UserEntry.COLUMN_NAME, name);
-        values.put(DbContract.UserEntry.COLUMN_LOCATION, location);
-        values.put(DbContract.UserEntry.COLUMN_AGE, age);
-        values.put(DbContract.UserEntry.COLUMN_BLOOD_GROUP, bloodGroup);
-        values.put(DbContract.UserEntry.COLUMN_ALT_MOBILE, altMobile);
-
-        return db.update(DbContract.UserEntry.TABLE_NAME, values, 
-                DbContract.UserEntry.COLUMN_MOBILE + " = ?", new String[]{mobile});
-    }
-
-    /**
-     * Deletes all records from all tables. Use with caution!
-     */
-    public void clearAllData() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + DbContract.MedicineEntry.TABLE_NAME);
-        db.execSQL("DELETE FROM " + DbContract.DoctorEntry.TABLE_NAME);
-        db.execSQL("DELETE FROM " + DbContract.UserEntry.TABLE_NAME);
-        // Clear session
-        mContext.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE).edit().clear().apply();
+    public int updateUser(String name, String loc, String age, String bg, String mobile, String alt) {
+        ContentValues v = new ContentValues();
+        v.put(DbContract.UserEntry.COLUMN_NAME, name);
+        v.put(DbContract.UserEntry.COLUMN_LOCATION, loc);
+        v.put(DbContract.UserEntry.COLUMN_AGE, age);
+        v.put(DbContract.UserEntry.COLUMN_BLOOD_GROUP, bg);
+        v.put(DbContract.UserEntry.COLUMN_ALT_MOBILE, alt);
+        return getWritableDatabase().update(DbContract.UserEntry.TABLE_NAME, v, DbContract.UserEntry.COLUMN_MOBILE + "=?", new String[]{mobile});
     }
 
     // --- MEDICINE CRUD ---
 
-    public long addMedicine(long doctorId, String name, int timesPerDay, 
-                           String timingRelation, String timingMeals, 
-                           int totalQuantity, int dosagePerTime, int remainingQuantity,
-                           String breakfastTime, String lunchTime, String dinnerTime) {
+    public long addMedicine(String userMobile, long docId, String name, int times, String rel, String meals, int total, int dosage, int rem, String start, String end, String b, String l, String d) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DbContract.MedicineEntry.COLUMN_DOCTOR_ID, doctorId);
-        values.put(DbContract.MedicineEntry.COLUMN_NAME, name);
-        values.put(DbContract.MedicineEntry.COLUMN_TIMES_PER_DAY, timesPerDay);
-        values.put(DbContract.MedicineEntry.COLUMN_TIMING_RELATION, timingRelation);
-        values.put(DbContract.MedicineEntry.COLUMN_TIMING_MEALS, timingMeals);
-        values.put(DbContract.MedicineEntry.COLUMN_TOTAL_QUANTITY, totalQuantity);
-        values.put(DbContract.MedicineEntry.COLUMN_DOSAGE_PER_TIME, dosagePerTime);
-        values.put(DbContract.MedicineEntry.COLUMN_REMAINING_QUANTITY, remainingQuantity);
-        values.put(DbContract.MedicineEntry.COLUMN_START_DATE, System.currentTimeMillis());
-        values.put(DbContract.MedicineEntry.COLUMN_BREAKFAST_TIME, breakfastTime);
-        values.put(DbContract.MedicineEntry.COLUMN_LUNCH_TIME, lunchTime);
-        values.put(DbContract.MedicineEntry.COLUMN_DINNER_TIME, dinnerTime);
-
-        return db.insert(DbContract.MedicineEntry.TABLE_NAME, null, values);
+        ContentValues v = new ContentValues();
+        v.put(DbContract.MedicineEntry.COLUMN_USER_MOBILE, userMobile);
+        if (docId != -1) v.put(DbContract.MedicineEntry.COLUMN_DOCTOR_ID, docId);
+        v.put(DbContract.MedicineEntry.COLUMN_NAME, name);
+        v.put(DbContract.MedicineEntry.COLUMN_TIMES_PER_DAY, times);
+        v.put(DbContract.MedicineEntry.COLUMN_TIMING_RELATION, rel);
+        v.put(DbContract.MedicineEntry.COLUMN_TIMING_MEALS, meals);
+        v.put(DbContract.MedicineEntry.COLUMN_TOTAL_QUANTITY, total);
+        v.put(DbContract.MedicineEntry.COLUMN_DOSAGE_PER_TIME, dosage);
+        v.put(DbContract.MedicineEntry.COLUMN_REMAINING_QUANTITY, rem);
+        v.put(DbContract.MedicineEntry.COLUMN_START_DATE, start);
+        v.put(DbContract.MedicineEntry.COLUMN_END_DATE, end);
+        v.put(DbContract.MedicineEntry.COLUMN_BREAKFAST_TIME, b);
+        v.put(DbContract.MedicineEntry.COLUMN_LUNCH_TIME, l);
+        v.put(DbContract.MedicineEntry.COLUMN_DINNER_TIME, d);
+        return db.insert(DbContract.MedicineEntry.TABLE_NAME, null, v);
     }
 
-    public int updateMedicine(long id, String name, int timesPerDay, 
-                              String timingRelation, String timingMeals, 
-                              int totalQuantity, int dosagePerTime, int remainingQuantity,
-                              String breakfastTime, String lunchTime, String dinnerTime) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DbContract.MedicineEntry.COLUMN_NAME, name);
-        values.put(DbContract.MedicineEntry.COLUMN_TIMES_PER_DAY, timesPerDay);
-        values.put(DbContract.MedicineEntry.COLUMN_TIMING_RELATION, timingRelation);
-        values.put(DbContract.MedicineEntry.COLUMN_TIMING_MEALS, timingMeals);
-        values.put(DbContract.MedicineEntry.COLUMN_TOTAL_QUANTITY, totalQuantity);
-        values.put(DbContract.MedicineEntry.COLUMN_DOSAGE_PER_TIME, dosagePerTime);
-        values.put(DbContract.MedicineEntry.COLUMN_REMAINING_QUANTITY, remainingQuantity);
-        values.put(DbContract.MedicineEntry.COLUMN_START_DATE, System.currentTimeMillis());
-        values.put(DbContract.MedicineEntry.COLUMN_BREAKFAST_TIME, breakfastTime);
-        values.put(DbContract.MedicineEntry.COLUMN_LUNCH_TIME, lunchTime);
-        values.put(DbContract.MedicineEntry.COLUMN_DINNER_TIME, dinnerTime);
-
-        return db.update(DbContract.MedicineEntry.TABLE_NAME, values, 
-                DbContract.MedicineEntry._ID + "=?", new String[]{String.valueOf(id)});
+    public int updateMedicine(long id, long docId, String name, int times, String rel, String meals, int total, int dosage, int rem, String start, String end, String b, String l, String d) {
+        ContentValues v = new ContentValues();
+        if (docId != -1) v.put(DbContract.MedicineEntry.COLUMN_DOCTOR_ID, docId);
+        else v.putNull(DbContract.MedicineEntry.COLUMN_DOCTOR_ID);
+        v.put(DbContract.MedicineEntry.COLUMN_NAME, name);
+        v.put(DbContract.MedicineEntry.COLUMN_TIMES_PER_DAY, times);
+        v.put(DbContract.MedicineEntry.COLUMN_TIMING_RELATION, rel);
+        v.put(DbContract.MedicineEntry.COLUMN_TIMING_MEALS, meals);
+        v.put(DbContract.MedicineEntry.COLUMN_TOTAL_QUANTITY, total);
+        v.put(DbContract.MedicineEntry.COLUMN_DOSAGE_PER_TIME, dosage);
+        v.put(DbContract.MedicineEntry.COLUMN_REMAINING_QUANTITY, rem);
+        v.put(DbContract.MedicineEntry.COLUMN_START_DATE, start);
+        v.put(DbContract.MedicineEntry.COLUMN_END_DATE, end);
+        v.put(DbContract.MedicineEntry.COLUMN_BREAKFAST_TIME, b);
+        v.put(DbContract.MedicineEntry.COLUMN_LUNCH_TIME, l);
+        v.put(DbContract.MedicineEntry.COLUMN_DINNER_TIME, d);
+        return getWritableDatabase().update(DbContract.MedicineEntry.TABLE_NAME, v, DbContract.MedicineEntry._ID + "=?", new String[]{String.valueOf(id)});
     }
 
     public void deleteMedicine(long id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(DbContract.MedicineEntry.TABLE_NAME, DbContract.MedicineEntry._ID + "=?", new String[]{String.valueOf(id)});
+        getWritableDatabase().delete(DbContract.MedicineEntry.TABLE_NAME, DbContract.MedicineEntry._ID + "=?", new String[]{String.valueOf(id)});
     }
 
     public Medicine getMedicineById(long id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(DbContract.MedicineEntry.TABLE_NAME,
-                null, DbContract.MedicineEntry._ID + "=?", new String[]{String.valueOf(id)},
-                null, null, null);
-        
-        Medicine medicine = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            medicine = parseMedicine(cursor);
-            cursor.close();
-        }
-        return medicine;
+        Cursor c = getReadableDatabase().query(DbContract.MedicineEntry.TABLE_NAME, null, DbContract.MedicineEntry._ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
+        Medicine m = null; if (c != null && c.moveToFirst()) { m = parseMedicine(c); c.close(); } return m;
     }
 
     public List<Medicine> getMedicinesForDoctor(long doctorId) {
         List<Medicine> list = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(DbContract.MedicineEntry.TABLE_NAME,
-                null, DbContract.MedicineEntry.COLUMN_DOCTOR_ID + "=?",
-                new String[]{String.valueOf(doctorId)}, null, null, DbContract.MedicineEntry._ID + " ASC");
-
-        if (cursor.moveToFirst()) {
-            do {
-                list.add(parseMedicine(cursor));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return list;
+        Cursor c = getReadableDatabase().query(DbContract.MedicineEntry.TABLE_NAME, null, DbContract.MedicineEntry.COLUMN_DOCTOR_ID + "=?", new String[]{String.valueOf(doctorId)}, null, null, DbContract.MedicineEntry._ID + " ASC");
+        if (c.moveToFirst()) { do { list.add(parseMedicine(c)); } while (c.moveToNext()); }
+        c.close(); return list;
     }
 
-    public List<Medicine> getAllMedicines() {
+    public List<Medicine> getAllMedicines(String userMobile) {
         List<Medicine> list = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + DbContract.MedicineEntry.TABLE_NAME, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                list.add(parseMedicine(cursor));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return list;
+        String query = "SELECT * FROM " + DbContract.MedicineEntry.TABLE_NAME + " WHERE " + DbContract.MedicineEntry.COLUMN_USER_MOBILE + "=?";
+        Cursor c = getReadableDatabase().rawQuery(query, new String[]{userMobile});
+        if (c.moveToFirst()) { do { list.add(parseMedicine(c)); } while (c.moveToNext()); }
+        c.close(); return list;
     }
 
-    /**
-     * Deducts one single dosage quantity from remaining stock when user takes medicine.
-     */
+    public List<Medicine> getAllMedicinesUnfiltered() {
+        List<Medicine> list = new ArrayList<>();
+        Cursor c = getReadableDatabase().rawQuery("SELECT * FROM " + DbContract.MedicineEntry.TABLE_NAME, null);
+        if (c.moveToFirst()) { do { list.add(parseMedicine(c)); } while (c.moveToNext()); }
+        c.close(); return list;
+    }
+
     public int deductMedicineDose(long id) {
-        Medicine medicine = getMedicineById(id);
-        if (medicine == null) return 0;
-
-        int newRemaining = Math.max(0, medicine.getRemainingQuantity() - medicine.getDosagePerTime());
-        
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(DbContract.MedicineEntry.COLUMN_REMAINING_QUANTITY, newRemaining);
-        
-        db.update(DbContract.MedicineEntry.TABLE_NAME, values, 
-                DbContract.MedicineEntry._ID + "=?", new String[]{String.valueOf(id)});
-        
-        return newRemaining;
+        Medicine m = getMedicineById(id);
+        if (m == null) return 0;
+        int rem = Math.max(0, m.getRemainingQuantity() - m.getDosagePerTime());
+        ContentValues v = new ContentValues(); v.put(DbContract.MedicineEntry.COLUMN_REMAINING_QUANTITY, rem);
+        getWritableDatabase().update(DbContract.MedicineEntry.TABLE_NAME, v, DbContract.MedicineEntry._ID + "=?", new String[]{String.valueOf(id)});
+        return rem;
     }
 
-    /**
-     * Finds the minimum remaining days among all medicines prescribed by a specific doctor.
-     * Returns -1 if the doctor has no medicines.
-     */
     public int getDoctorMinRemainingDays(long doctorId) {
         List<Medicine> medicines = getMedicinesForDoctor(doctorId);
-        if (medicines.isEmpty()) {
-            return -1;
-        }
-
-        int minDays = Integer.MAX_VALUE;
-        for (Medicine med : medicines) {
-            int days = med.getRemainingDays();
-            if (days < minDays) {
-                minDays = days;
-            }
-        }
-        return minDays;
+        if (medicines.isEmpty()) return -1;
+        int min = Integer.MAX_VALUE;
+        for (Medicine med : medicines) { int d = med.getRemainingDays(); if (d < min) min = d; }
+        return min;
     }
 
-    private Medicine parseMedicine(Cursor cursor) {
-        long id = cursor.getLong(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry._ID));
-        long docId = cursor.getLong(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_DOCTOR_ID));
-        String name = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_NAME));
-        int timesPerDay = cursor.getInt(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_TIMES_PER_DAY));
-        String timingRelation = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_TIMING_RELATION));
-        String timingMeals = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_TIMING_MEALS));
-        int totalQty = cursor.getInt(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_TOTAL_QUANTITY));
-        int dosage = cursor.getInt(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_DOSAGE_PER_TIME));
-        int remaining = cursor.getInt(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_REMAINING_QUANTITY));
-        long startDate = cursor.getLong(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_START_DATE));
-        String bTime = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_BREAKFAST_TIME));
-        String lTime = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_LUNCH_TIME));
-        String dTime = cursor.getString(cursor.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_DINNER_TIME));
+    // --- LOGS CRUD ---
 
-        return new Medicine(id, docId, name, timesPerDay, timingRelation, timingMeals, totalQty, dosage, remaining, startDate, bTime, lTime, dTime);
+    public void logMedicineIntake(long medId, String date, String status) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues v = new ContentValues();
+        v.put(DbContract.MedicineLogEntry.COLUMN_MEDICINE_ID, medId);
+        v.put(DbContract.MedicineLogEntry.COLUMN_DATE, date);
+        v.put(DbContract.MedicineLogEntry.COLUMN_STATUS, status);
+        db.insert(DbContract.MedicineLogEntry.TABLE_NAME, null, v);
+    }
+
+    public int getManualLogCount(long medId, String date) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM " + DbContract.MedicineLogEntry.TABLE_NAME +
+                " WHERE " + DbContract.MedicineLogEntry.COLUMN_MEDICINE_ID + "=? AND " + DbContract.MedicineLogEntry.COLUMN_DATE + "=?" +
+                " AND " + DbContract.MedicineLogEntry.COLUMN_STATUS + " IN ('Taken', 'Missed')";
+        Cursor c = db.rawQuery(query, new String[]{String.valueOf(medId), date});
+        int count = 0;
+        if (c.moveToFirst()) count = c.getInt(0);
+        c.close();
+        return count;
+    }
+
+    public String getLogStatus(long medId, String date) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT " + DbContract.MedicineLogEntry.COLUMN_STATUS + " FROM " + DbContract.MedicineLogEntry.TABLE_NAME +
+                " WHERE " + DbContract.MedicineLogEntry.COLUMN_MEDICINE_ID + "=? AND " + DbContract.MedicineLogEntry.COLUMN_DATE + "=?";
+        Cursor c = db.rawQuery(query, new String[]{String.valueOf(medId), date});
+        String status = "";
+        if (c.moveToFirst()) status = c.getString(0);
+        c.close();
+        return status;
+    }
+
+    public int getLogCount(String userMobile, String status) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM " + DbContract.MedicineLogEntry.TABLE_NAME + " l " +
+                "INNER JOIN " + DbContract.MedicineEntry.TABLE_NAME + " m ON l." + DbContract.MedicineLogEntry.COLUMN_MEDICINE_ID + "=m." + DbContract.MedicineEntry._ID + " " +
+                "LEFT JOIN " + DbContract.DoctorEntry.TABLE_NAME + " d ON m." + DbContract.MedicineEntry.COLUMN_DOCTOR_ID + "=d." + DbContract.DoctorEntry._ID + " " +
+                "WHERE (d." + DbContract.DoctorEntry.COLUMN_USER_MOBILE + "=? OR m." + DbContract.MedicineEntry.COLUMN_DOCTOR_ID + " IS NULL) AND l." + DbContract.MedicineLogEntry.COLUMN_STATUS + "=?";
+        Cursor c = db.rawQuery(query, new String[]{userMobile, status});
+        int count = 0; if (c.moveToFirst()) count = c.getInt(0);
+        c.close(); return count;
+    }
+
+    public void addAppointment(String mobile, long docId, String date, String time, String reason, String priority) {
+        ContentValues v = new ContentValues();
+        v.put(DbContract.AppointmentEntry.COLUMN_USER_MOBILE, mobile);
+        v.put(DbContract.AppointmentEntry.COLUMN_DOCTOR_ID, docId);
+        v.put(DbContract.AppointmentEntry.COLUMN_DATE, date);
+        v.put(DbContract.AppointmentEntry.COLUMN_TIME, time);
+        v.put(DbContract.AppointmentEntry.COLUMN_REASON, reason);
+        v.put(DbContract.AppointmentEntry.COLUMN_PRIORITY, priority);
+        getWritableDatabase().insert(DbContract.AppointmentEntry.TABLE_NAME, null, v);
+    }
+
+    public void deleteAppointment(long id) {
+        getWritableDatabase().delete(DbContract.AppointmentEntry.TABLE_NAME, DbContract.AppointmentEntry._ID + "=?", new String[]{String.valueOf(id)});
+    }
+
+    public List<Appointment> getAllAppointments(String mobile) {
+        List<Appointment> list = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + DbContract.AppointmentEntry.TABLE_NAME + " WHERE " + DbContract.AppointmentEntry.COLUMN_USER_MOBILE + "=? ORDER BY " + DbContract.AppointmentEntry.COLUMN_DATE + " ASC", new String[]{mobile});
+        if (c.moveToFirst()) {
+            do {
+                list.add(new Appointment(
+                        c.getLong(c.getColumnIndexOrThrow(DbContract.AppointmentEntry._ID)),
+                        c.getString(c.getColumnIndexOrThrow(DbContract.AppointmentEntry.COLUMN_USER_MOBILE)),
+                        c.getLong(c.getColumnIndexOrThrow(DbContract.AppointmentEntry.COLUMN_DOCTOR_ID)),
+                        c.getString(c.getColumnIndexOrThrow(DbContract.AppointmentEntry.COLUMN_DATE)),
+                        c.getString(c.getColumnIndexOrThrow(DbContract.AppointmentEntry.COLUMN_TIME)),
+                        c.getString(c.getColumnIndexOrThrow(DbContract.AppointmentEntry.COLUMN_REASON)),
+                        c.getString(c.getColumnIndexOrThrow(DbContract.AppointmentEntry.COLUMN_PRIORITY))
+                ));
+            } while (c.moveToNext());
+        }
+        c.close();
+        return list;
+    }
+
+    public int getUpcomingAppointmentCount(String mobile) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT COUNT(*) FROM " + DbContract.AppointmentEntry.TABLE_NAME + " WHERE " + DbContract.AppointmentEntry.COLUMN_USER_MOBILE + "=?", new String[]{mobile});
+        int count = 0; if (c.moveToFirst()) count = c.getInt(0);
+        c.close(); return count;
+    }
+
+    private Medicine parseMedicine(Cursor c) {
+        return new Medicine(c.getLong(c.getColumnIndexOrThrow(DbContract.MedicineEntry._ID)),
+                c.getLong(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_DOCTOR_ID)),
+                c.getString(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_NAME)),
+                c.getInt(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_TIMES_PER_DAY)),
+                c.getString(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_TIMING_RELATION)),
+                c.getString(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_TIMING_MEALS)),
+                c.getInt(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_TOTAL_QUANTITY)),
+                c.getInt(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_DOSAGE_PER_TIME)),
+                c.getInt(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_REMAINING_QUANTITY)),
+                c.getString(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_START_DATE)),
+                c.getString(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_END_DATE)),
+                c.getString(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_BREAKFAST_TIME)),
+                c.getString(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_LUNCH_TIME)),
+                c.getString(c.getColumnIndexOrThrow(DbContract.MedicineEntry.COLUMN_DINNER_TIME)));
     }
 }
