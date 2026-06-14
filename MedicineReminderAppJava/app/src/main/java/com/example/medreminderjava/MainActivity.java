@@ -6,7 +6,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +33,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements DoctorAdapter.OnDoctorClickListener {
@@ -81,10 +79,6 @@ public class MainActivity extends AppCompatActivity implements DoctorAdapter.OnD
         findViewById(R.id.btnEditProfile).setOnClickListener(v -> showEditProfileDialog());
         ivProfileImage.setOnClickListener(v -> showProfileSelectionDialog());
         findViewById(R.id.fabAddDoctor).setOnClickListener(v -> showAddDoctorDialog());
-        findViewById(R.id.btnSimulateAlerts).setOnClickListener(v -> {
-            AlarmReceiver.checkAllMedicinesAndNotify(this);
-            Toast.makeText(this, "Daily check complete.", Toast.LENGTH_SHORT).show();
-        });
 
         findViewById(R.id.cardEmergency).setOnClickListener(v -> showEmergencyDoctorDialog());
         findViewById(R.id.cardAppointments).setOnClickListener(v -> showBookingDialog());
@@ -92,6 +86,25 @@ public class MainActivity extends AppCompatActivity implements DoctorAdapter.OnD
         rvDoctors.setLayoutManager(new LinearLayoutManager(this));
         setupBottomNavigation();
         requestAppPermissions();
+        
+        // Request Overlay Permission (Draw over other apps) for "Direct to Screen" Alarms
+        checkOverlayPermission();
+    }
+
+    private void checkOverlayPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!android.provider.Settings.canDrawOverlays(this)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Enable Alarms")
+                        .setMessage("To show alarms directly on your screen even when you are not using the app, please enable 'Display over other apps' in the next screen.")
+                        .setPositiveButton("Go to Settings", (dialog, which) -> {
+                            Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                    Uri.parse("package:" + getPackageName()));
+                            startActivity(intent);
+                        })
+                        .show();
+            }
+        }
     }
 
     private void setupBottomNavigation() {
@@ -257,22 +270,24 @@ public class MainActivity extends AppCompatActivity implements DoctorAdapter.OnD
                         Doctor selected = doctors.get(pos);
                         String date = etDate.getText().toString();
                         String time = etTime.getText().toString();
-                        String reason = etReason.getText().toString().trim();
-                        if (reason.isEmpty()) reason = "General Visit";
+                        String reasonInput = etReason.getText().toString().trim();
+                        String reason = reasonInput.isEmpty() ? "General Visit" : reasonInput;
                         String priority = spinnerPriority.getSelectedItem().toString();
                         
                         dbHelper.addAppointment(loggedInMobile, selected.getId(), date, time, reason, priority);
                         
                         // Fetch user name for the SMS
-                        String userName = "Patient";
+                        String nameForSms;
                         android.database.Cursor cursor = dbHelper.getUserByMobile(loggedInMobile);
                         if (cursor != null && cursor.moveToFirst()) {
-                            userName = cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_NAME));
+                            nameForSms = cursor.getString(cursor.getColumnIndexOrThrow(com.example.medreminderjava.data.DbContract.UserEntry.COLUMN_NAME));
                             cursor.close();
+                        } else {
+                            nameForSms = "Patient";
                         }
 
                         // Send SMS to Hospital/Doctor
-                        String smsMessage = "New Appointment Request: Patient " + userName + " needs an appointment for " + reason + " on " + date + " at " + time + ".";
+                        String smsMessage = "New Appointment Request: Patient " + nameForSms + " needs an appointment for " + reason + " on " + date + " at " + time + ".";
                         NotificationHelper.sendSmsNotification(this, selected.getContact(), smsMessage);
 
                         Toast.makeText(this, "Request for appointment sent", Toast.LENGTH_SHORT).show();

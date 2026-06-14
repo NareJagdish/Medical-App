@@ -261,15 +261,6 @@
                 android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_doctor" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSimulateAlerts"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/simulate_stock_check"
-                android:textColor="@color/accent" />
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

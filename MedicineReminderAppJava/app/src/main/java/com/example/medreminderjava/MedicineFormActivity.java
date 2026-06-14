@@ -33,7 +33,6 @@ public class MedicineFormActivity extends AppCompatActivity {
     private boolean isEditMode = false;
 
     private EditText etMedicineName, etTimesPerDay, etDosagePerTime, etTotalQuantity;
-    private RadioGroup rgTimingRelation;
     private RadioButton rbBefore, rbAfter;
     private CheckBox cbBreakfast, cbLunch, cbDinner;
     private TextView tvBreakfastTime, tvLunchTime, tvDinnerTime;
@@ -65,7 +64,6 @@ public class MedicineFormActivity extends AppCompatActivity {
         etTimesPerDay = findViewById(R.id.etTimesPerDay);
         etDosagePerTime = findViewById(R.id.etDosagePerTime);
         etTotalQuantity = findViewById(R.id.etTotalQuantity);
-        rgTimingRelation = findViewById(R.id.rgTimingRelation);
         rbBefore = findViewById(R.id.rbBefore);
         rbAfter = findViewById(R.id.rbAfter);
         cbBreakfast = findViewById(R.id.cbBreakfast);
@@ -100,17 +98,21 @@ public class MedicineFormActivity extends AppCompatActivity {
 
         List<String> names = new ArrayList<>();
         names.add("No Doctor (Self)");
-        int selectedIndex = 0;
-        for (int i = 0; i < doctorList.size(); i++) {
-            names.add(doctorList.get(i).getName());
-            if (doctorList.get(i).getId() == doctorId) {
-                selectedIndex = i + 1;
-            }
+        for (Doctor doc : doctorList) {
+            names.add(doc.getName());
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, names);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDoctors.setAdapter(adapter);
-        spinnerDoctors.setSelection(selectedIndex);
+        
+        if (doctorId != -1) {
+            for (int i = 0; i < doctorList.size(); i++) {
+                if (doctorList.get(i).getId() == doctorId) {
+                    spinnerDoctors.setSelection(i + 1);
+                    break;
+                }
+            }
+        }
     }
 
     private void showTimePicker(TextView target) {
@@ -146,7 +148,6 @@ public class MedicineFormActivity extends AppCompatActivity {
         tvLunchTime.setText(m.getLunchTime());
         tvDinnerTime.setText(m.getDinnerTime());
         
-        // Handle doctor selection
         if (m.getDoctorId() > 0) {
             for (int i = 0; i < doctorList.size(); i++) {
                 if (doctorList.get(i).getId() == m.getDoctorId()) {
@@ -162,13 +163,13 @@ public class MedicineFormActivity extends AppCompatActivity {
         if (name.isEmpty()) { Toast.makeText(this, "Enter medicine name", Toast.LENGTH_SHORT).show(); return; }
 
         int times = 1;
-        try { times = Integer.parseInt(etTimesPerDay.getText().toString()); } catch (Exception e) {}
+        try { times = Integer.parseInt(etTimesPerDay.getText().toString()); } catch (Exception ignored) {}
 
         int dosage = 1;
-        try { dosage = Integer.parseInt(etDosagePerTime.getText().toString()); } catch (Exception e) {}
+        try { dosage = Integer.parseInt(etDosagePerTime.getText().toString()); } catch (Exception ignored) {}
 
         int total = 30;
-        try { total = Integer.parseInt(etTotalQuantity.getText().toString()); } catch (Exception e) {}
+        try { total = Integer.parseInt(etTotalQuantity.getText().toString()); } catch (Exception ignored) {}
 
         String relation = rbBefore.isChecked() ? "Before" : "After";
 

@@ -2995,6 +2995,7 @@ int drawable btn_radio_off_mtrl 0x7f080080
 int drawable btn_radio_off_to_on_mtrl_animation 0x7f080081
 int drawable btn_radio_on_mtrl 0x7f080082
 int drawable btn_radio_on_to_off_mtrl_animation 0x7f080083
+int drawable care_bell_logo 0x7f0800ea
 int drawable design_fab_background 0x7f080084
 int drawable design_ic_visibility 0x7f080085
 int drawable design_ic_visibility_off 0x7f080086
@@ -3210,11 +3211,9 @@ int id btnLogin 0x7f09006f
 int id btnRegister 0x7f090072
 int id btnSave 0x7f090073
 int id btnShareReport 0x7f090074
-int id btnSimulateAlerts 0x7f090075
 int id btnSkipped 0x7f090261
 int id btnTakeNow 0x7f090262
 int id btnViewAllDoctors 0x7f090077
-int id btnViewPrescription 0x7f090078
 int id buttonPanel 0x7f090079
 int id cache_measures 0x7f09007a
 int id callMeasure 0x7f09007b
@@ -3682,7 +3681,6 @@ int id tvMedicineStatusSummary 0x7f09023b
 int id tvMissedCount 0x7f09023c
 int id tvNoAppointments 0x7f090297
 int id tvNoMedicines 0x7f09023d
-int id tvPrescriptionName 0x7f09023e
 int id tvReason 0x7f090298
 int id tvRegisterLink 0x7f09023f
 int id tvRemainingDaysBadge 0x7f090240
@@ -3864,7 +3862,6 @@ int layout item_adherence 0x7f0c0077
 int layout item_appointment 0x7f0c007a
 int layout item_doctor 0x7f0c0036
 int layout item_medicine 0x7f0c0037
-int layout item_prescription 0x7f0c0038
 int layout m3_alert_dialog 0x7f0c0039
 int layout m3_alert_dialog_actions 0x7f0c003a
 int layout m3_alert_dialog_title 0x7f0c003b

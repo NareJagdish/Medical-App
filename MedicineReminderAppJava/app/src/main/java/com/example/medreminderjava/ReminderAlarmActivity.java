@@ -121,7 +121,7 @@ public class ReminderAlarmActivity extends AppCompatActivity {
         if (medicineId != -1) {
             String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
             dbHelper.logMedicineIntake(medicineId, today, "Missed");
-            Toast.makeText(this, "Medicine Logged: Skipped", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Medicine Logged: Declined", Toast.LENGTH_SHORT).show();
         }
     }
 

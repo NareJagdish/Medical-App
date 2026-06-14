@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Medicine Reminder</string>
+    <string name="app_name">Care Bell</string>
     <string name="user_profile">User Profile</string>
     <string name="user_name_format">Name: %s</string>
     <string name="user_age_format">%s years</string>

@@ -162,6 +162,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteDoctor(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
+        // Delete all medicines prescribed by this doctor
+        db.delete(DbContract.MedicineEntry.TABLE_NAME, DbContract.MedicineEntry.COLUMN_DOCTOR_ID + "=?", new String[]{String.valueOf(id)});
+        // Delete the doctor record
         db.delete(DbContract.DoctorEntry.TABLE_NAME, DbContract.DoctorEntry._ID + "=?", new String[]{String.valueOf(id)});
     }
 
@@ -302,11 +305,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(DbContract.MedicineLogEntry.TABLE_NAME, null, v);
     }
 
-    public int getManualLogCount(long medId, String date) {
+    public int getInteractionCount(long medId, String date) {
         SQLiteDatabase db = getReadableDatabase();
         String query = "SELECT COUNT(*) FROM " + DbContract.MedicineLogEntry.TABLE_NAME +
                 " WHERE " + DbContract.MedicineLogEntry.COLUMN_MEDICINE_ID + "=? AND " + DbContract.MedicineLogEntry.COLUMN_DATE + "=?" +
-                " AND " + DbContract.MedicineLogEntry.COLUMN_STATUS + " IN ('Taken', 'Missed')";
+                " AND " + DbContract.MedicineLogEntry.COLUMN_STATUS + " IN ('Taken', 'Missed', 'Auto-Taken')";
         Cursor c = db.rawQuery(query, new String[]{String.valueOf(medId), date});
         int count = 0;
         if (c.moveToFirst()) count = c.getInt(0);

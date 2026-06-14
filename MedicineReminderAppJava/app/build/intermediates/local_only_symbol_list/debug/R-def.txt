@@ -22,6 +22,7 @@ color white
 drawable badge_bg_danger
 drawable badge_bg_normal
 drawable badge_bg_warning
+drawable care_bell_logo
 drawable gradient_button
 drawable ic_launcher
 drawable ic_launcher_background
@@ -48,11 +49,9 @@ id btnLogin
 id btnRegister
 id btnSave
 id btnShareReport
-id btnSimulateAlerts
 id btnSkipped
 id btnTakeNow
 id btnViewAllDoctors
-id btnViewPrescription
 id cardAppointments
 id cardBadge
 id cardDoctorHeader
@@ -145,7 +144,6 @@ id tvMedicineStatusSummary
 id tvMissedCount
 id tvNoAppointments
 id tvNoMedicines
-id tvPrescriptionName
 id tvReason
 id tvRegisterLink
 id tvRemainingDaysBadge
@@ -174,7 +172,6 @@ layout item_adherence
 layout item_appointment
 layout item_doctor
 layout item_medicine
-layout item_prescription
 layout view_report_day
 menu bottom_nav_menu
 menu main_menu

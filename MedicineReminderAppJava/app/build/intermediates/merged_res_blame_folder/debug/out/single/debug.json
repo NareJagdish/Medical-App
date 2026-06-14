@@ -76,10 +76,6 @@
         "source": "C:\\Users\\hp\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\layout\\activity_main.xml"
     },
     {
-        "merged": "com.example.medreminderjava.app-merged_res-32:/layout_activity_medicine_form.xml.flat",
-        "source": "com.example.medreminderjava.app-main-34:/layout/activity_medicine_form.xml"
-    },
-    {
         "merged": "C:\\Users\\hp\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\drawable_ic_launcher_background.xml.flat",
         "source": "C:\\Users\\hp\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\drawable\\ic_launcher_background.xml"
     },
@@ -124,8 +120,16 @@
         "source": "C:\\Users\\hp\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\drawable\\shape_form_card.xml"
     },
     {
+        "merged": "com.example.medreminderjava.app-merged_res-32:/layout_activity_login.xml.flat",
+        "source": "com.example.medreminderjava.app-main-34:/layout/activity_login.xml"
+    },
+    {
         "merged": "C:\\Users\\hp\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\drawable_ic_launcher.xml.flat",
         "source": "C:\\Users\\hp\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-main-34:\\drawable\\ic_launcher.xml"
+    },
+    {
+        "merged": "com.example.medreminderjava.app-merged_res-32:/drawable_care_bell_logo.xml.flat",
+        "source": "com.example.medreminderjava.app-main-34:/drawable/care_bell_logo.xml"
     },
     {
         "merged": "C:\\Users\\hp\\.gradle\\daemon\\8.5\\com.example.medreminderjava.app-merged_res-32:\\drawable_shape_med_input.xml.flat",

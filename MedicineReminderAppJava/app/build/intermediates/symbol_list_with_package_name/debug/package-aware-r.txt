@@ -2996,6 +2996,7 @@ drawable btn_radio_off_mtrl
 drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
+drawable care_bell_logo
 drawable design_fab_background
 drawable design_ic_visibility
 drawable design_ic_visibility_off
@@ -3211,11 +3212,9 @@ id btnLogin
 id btnRegister
 id btnSave
 id btnShareReport
-id btnSimulateAlerts
 id btnSkipped
 id btnTakeNow
 id btnViewAllDoctors
-id btnViewPrescription
 id buttonPanel
 id cache_measures
 id callMeasure
@@ -3683,7 +3682,6 @@ id tvMedicineStatusSummary
 id tvMissedCount
 id tvNoAppointments
 id tvNoMedicines
-id tvPrescriptionName
 id tvReason
 id tvRegisterLink
 id tvRemainingDaysBadge
@@ -3865,7 +3863,6 @@ layout item_adherence
 layout item_appointment
 layout item_doctor
 layout item_medicine
-layout item_prescription
 layout m3_alert_dialog
 layout m3_alert_dialog_actions
 layout m3_alert_dialog_title
